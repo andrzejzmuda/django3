@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="5;url={% url 'canteen:menu_touch' %}" />
+    <title>Card authorization</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/Google-Style-Login.css">
+</head>
+
+<body>
+    <div class="login-card"><img src="/static/img/avatar_2x.png" class="profile-img-card" alt="avatar_2x">
+        <p class="profile-name-card"> </p>
+        <form class="form-signin" method="post">{% csrf_token %}
+            <input name="textfield" class="form-control" type="password" required="" placeholder="Enter your card" id="inputPassword" onblur="this.focus()" autofocus>
+        </form>
+    </div>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+
+</html>

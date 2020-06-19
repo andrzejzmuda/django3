@@ -1,0 +1,56 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>managers and workers</title>
+</head>
+<body>
+
+<form action="{% url 'hr_working_hours:managers_workers_add' %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+<div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                </div>
+   <div class="col-md-4 column">
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label for="id_manager">manager:</label>
+        <select class="select" id="id_manager" name="manager">
+            {% for n in managers_diff %}
+                <option value="{{ n.id }}">{{ n.username }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="id_worker">workers:</label>
+        <select class="select2" id="id_worker" name="worker" multiple="multiple">
+                {% for n in workers_diff %}
+                    <option value="{{ n.id }}">{{ n.username }}</option>
+                {% endfor %}
+        </select>
+    </p>
+</form>
+   </div>
+        <div class="modal-footer">
+            <p>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save</button>
+
+                <a href="{{ previous_page }}" type="button" class="btn btn-secondary">
+                    <i class="fas fa-window-close"></i> cancel</a>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+            </p>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    </head>
+	<body>
+
+<form action="{% url 'instructions:add' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+<p>
+<div class="row">
+	<div class="col-md-4">
+		<div class="form-group">
+            <label for="id_sachnr">Sachnr:</label>{{ form.errors.sachnr }}
+            <input class="form-control" placeholder="Sachnummer" id="id_sachnr" maxlength="255" name="sachnr" type="text">
+            </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+            <label for="id_kk_docs">documentation:</label>{{ form.errors.kk_docs }}
+            <input class="form-control" id="id_kk_docs" name="kk_docs" type="file">
+        </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+            <label for="id_malta">Malta:</label>{{ form.errors.malta }}
+            <input class="form-control" id="id_malta" name="malta" type="file">
+        </div>
+	</div>
+    </div>
+</p>
+
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+            <label for="id_packing">packing:</label>{{ form.errors.packing }}
+            <input class="form-control" id="id_packing" name="packing" type="file">
+            </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">{{ form.errors.soldering }}
+            <label for="id_soldering">soldering:</label>
+            <input class="form-control" id="id_soldering" name="soldering" type="file">
+            </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+            <label for="id_heating">heating:</label>{{ form.errors.heating }}
+            <input class="form-control" id="id_heating" name="heating" type="file">
+            </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+        <label for="id_drawing">drawing:</label>{{ form.errors.drawing }}
+        <input class="form-control" id="id_drawing" name="drawing" type="file">
+        </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+        <label for="id_sab_control">SAB control:</label>{{ form.errors.sab_control }}
+        <input class="form-control" id="id_sab_control" name="sab_control" type="file">
+        </div>
+	</div>
+    </div>
+</p>
+<p>
+    <div class="row">
+    <div class="col-md-4">
+		<div class="form-group">
+        <label for="id_sab_soldering">SAB soldering:</label>{{ form.errors.sab_soldering }}
+        <input class="form-control" id="id_sab_soldering" name="sab_soldering" type="file">
+            </div>
+	</div>
+    </div>
+</p>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a href="{% url 'instructions:lista' %}" type="button" class="btn btn-danger">Cancel</a>
+    <br /><br />
+</form>
+
+	</body>
+</html>
+{% endblock %}

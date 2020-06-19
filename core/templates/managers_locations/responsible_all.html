@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of responsibilities</title>
+            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
+<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+
+<!-- select 2 -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tabela').dataTable({
+
+                });
+			} );
+		</script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select2").selectize( {
+                    plugins: ['remove_button']
+                });
+            });
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select").selectize( {
+                });
+            });
+        </script>
+
+</head>
+<body>
+<table class="table table-striped table-bordered" id="tabela">
+	<thead>
+		<tr>
+			<th>location</th>
+            <th>shortsign</th>
+            <th>delete</th>
+        </tr>
+	</thead>
+	<tbody>
+    {% for n in all %}
+		<tr>
+            <td>{{ n.location }}
+                <a href="{% url 'core:edit_responsible' pk=n.id %}"><i class="fa fa-edit"></i></a></td>
+        	<td>{% for x in n.shortsign.all %} {{ x }}, {% endfor %}</td>
+            <td><a href="{% url 'core:delete_responsible' pk=n.id %}"><i class="fa fa-trash-alt"></i></span></a></td>
+		</tr>
+    {% endfor %}
+</table>
+
+<div class="col-md-4 column">
+    <form method="post">
+        {% csrf_token %}
+        <p><label for="id_location">location:</label>
+        <select class="select" id="id_location" name="location">
+        <option value="" selected="selected">---------</option>
+        {% for n in locations %}
+            <option value="{{ n.id }}">{{ n.location }} {{ n.detailed_location }}</option>
+        {% endfor %}
+        </select></p>
+        <p><label for="id_shortsign">shortsign:</label>
+            <select class="select2" id="id_shortsign" name="shortsign" multiple="multiple">
+                <option value>shortsign</option>
+                {% for n in users %}
+                    <option value="{{ n.id }}">{{ n.username }}</option>
+                {% endfor %}
+        </select></p>
+
+        <p><input class="btn btn-primary" type="submit" value="Save">
+        <a href="{% url 'dashboard:dashboard' %}" type="button" class="btn btn-secondary">Cancel</a></p>
+    </form>
+</div>
+
+</body>
+</html>
+{% endblock %}

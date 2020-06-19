@@ -1,0 +1,64 @@
+{% block content %}
+    {% load l10n %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>edytuj potrawę</title>
+</head>
+
+
+<body>
+<script type="text/javascript" charset="utf-8">
+
+    $(document).ready(function() {
+                $(".selectize").selectize({
+                plugins: ['remove_button']
+
+                });
+            });
+
+</script>
+
+<form action="{% url 'menu_edit' edit.id %}" enctype="multipart/form-data" method="post" class="upload">
+
+    {% csrf_token %}
+
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">edytuj potrawę</h4>
+                <p>
+                    <label for="id_name">nazwa:</label>
+                    <input id="id_name" maxlength="250" name="name" type="text" class="form-control" value="{{ edit.name }}">
+                </p>
+                <p>
+                    <label for="id_sides">dodatki:</label>
+                    <select class="selectize" multiple="multiple" id="id_sides" name="sides">
+                        {% for n in edit_sides %}
+                        <option value="{{ n.id }}" selected="selected">{{ n.name }}</option>
+                        {% endfor %}
+                        {% for n in sides %}
+                        <option value="{{ n.id }}">{{ n.name }}</option>
+                        {% endfor %}
+                        </select>
+                    </p>
+                    <p>
+                        <label for="id_price">cena:</label>
+                        <input id="id_price" class="form-control" name="price" step="0,01" value="{{ edit.price|unlocalize }}">
+                    </p>
+            <div class="modal-footer">
+        <button class="btn btn-info" type="submit">zapisz</button>
+        <a href="{% url 'menu_all' %}" type="button" class="btn btn-default">anuluj</a>
+    </div>
+
+      </div>
+    </div>
+  </div>
+
+</form>
+
+</body>
+</html>
+{% endblock %}

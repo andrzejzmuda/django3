@@ -1,0 +1,63 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+<style type="text/css">
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin
+.form-signin {
+  margin-bottom: 10px;
+}
+.form-signin {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+</style>
+
+
+<div class="container">
+{% if form.errors %}
+    <div class="form-signin">
+     <div class="alert alert-danger">Invalid username or insufficient authorisation level.</div>
+    </div>
+{% endif %}
+
+    <form class="form-signin" role="form" method="post" action="{% url 'login' %}">
+    {%  csrf_token %}
+        <div>
+            <label for="username">User</label>
+            <input class="form-control" placeholder="Login" id="id_username" name="username" type="text" />
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input class="form-control" placeholder="Password" id="id_password" name="password" type="password" />
+        </div>
+         <input type="submit" value="login" class="btn btn-lg btn-primary btn-block"/>
+         <input type="hidden" name="next" value="/" />
+    </form>
+</div>
+{% endblock %}

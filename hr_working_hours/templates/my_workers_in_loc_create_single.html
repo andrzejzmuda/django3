@@ -1,0 +1,93 @@
+{% load static %}
+{% load aux_calculations %}
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<script src="/static/js/scripts_create_single.js"></script>
+
+<body>
+<form action="{% url 'hr_working_hours:my_workers_in_loc_create_single' worker %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+    <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">a new event</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <b>shortsign</b>
+                    {{ form.shortsign }}
+                    </p>
+                    <p>
+                        <b>absence(?)</b>
+                        <input id="id_holiday" name="holiday" type="checkbox">
+                    </p>
+                    <p id="absence_type">
+                        <b>absence type</b>
+                        {{ form.holiday_type }}
+                    </p>
+                    <p>
+                        <b>{{ form.entry_time.label }}</b>
+                        {{ form.entry_time }}
+                    </p>
+                    <p>
+                        <b>{{ form.leaving_time.label }}</b>
+                        {{ form.leaving_time }}
+                    </p>
+                    <p>
+                        <b>accepted(?)</b>
+                        {{ form.accepted }}
+                    </p>
+</div>
+    {{ form.errors }}
+    <div class="modal-footer">
+            <p>
+                <input id="saveLink" type="hidden" name="next" value="{{ request.GET.next }}#linkto{{ day_selected|date:"j.m.Y"}}">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save</button>
+
+                <a href="{{ previous_page }}" type="button" class="btn btn-secondary">
+                    <i class="fas fa-window-close"></i> cancel</a>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+            </p>
+            </div>
+    </div>
+</form>
+<script>
+$(document).ready(function() {
+    document.getElementById("id_shortsign").value = '{{ worker }}';
+    {% if day_selected %}
+        document.getElementById("id_entry_time").value = '{{ day_selected|date:"j.m.Y H:i" }}';
+    {% endif %}
+    $('#id_leaving_time, #id_entry_time').datetimepicker({
+                format: 'd.m.Y H:i',
+                lang: 'en',
+                formatTime: 'H:i',
+                formatDate:'Y/m/d',
+                timepicker:true,
+                weeks: true,
+                dayOfWeekStart: 1,
+    {% if last_day %}
+        maxDate: "{{ last_day|date:'Y/m/d' }}"
+    {% else %}
+        maxDate: ""
+    {% endif %}
+            });
+})
+</script>
+</body>
+</html>

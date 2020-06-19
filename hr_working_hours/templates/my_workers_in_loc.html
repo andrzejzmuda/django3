@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<meta charset="UTF-8">
+<!-- datatables -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+<script type="text/javascript" src="/static/js/scripts.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#table').dataTable();
+
+        } );
+    </script>
+<br>
+<p>
+    <a href="{% url 'hr_working_hours:WorkerToLoc' %}" type="button" class="btn btn-outline-primary">
+    <i class="fas fa-list"></i> Back to locations list</a>
+</p>
+
+{% if my_workers %}
+    <div class="table-responsive-sm">
+            <table class="table" id="table">
+                <thead>
+                <tr>
+                       <th>shortsign</th>
+                       <th>manager</th>
+                       <th>company</th>
+                       <th>week number</th>
+                       <th>month</th>
+                </tr>
+                </thead>
+                <tbody>
+    {% for item in my_workers %}
+        <tr>
+            <td>{{ item.workers__username }}</td>
+            <td>{{ item.workers__worker__manager__username|default_if_none:"not found" }}</td>
+            <td>{{ item.workers__usercompanycard__company__name|default_if_none:"not found" }}</td>
+            <td>
+                <div class="dropdown">
+                  <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    select week
+                  </a>
+
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_four_start_week|date:"d-m-Y" week_end=minus_four_end_week|date:"d-m-Y" %}">
+                        W {{ minus_four_end_week|date:"W" }}: {{ minus_four_start_week }} - {{ minus_four_end_week }}</a>
+                  <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_three_start_week|date:"d-m-Y" week_end=minus_three_end_week|date:"d-m-Y" %}">
+                        W {{ minus_three_end_week|date:"W" }}: {{ minus_three_start_week }} - {{ minus_three_end_week }}</a>
+                    <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_two_start_week|date:"d-m-Y" week_end=minus_two_end_week|date:"d-m-Y" %}">
+                        W {{ minus_two_end_week|date:"W" }}: {{ minus_two_start_week }} - {{ minus_two_end_week }}</a>
+                    <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_one_start_week|date:"d-m-Y" week_end=minus_one_end_week|date:"d-m-Y" %}">
+                        W {{ minus_one_end_week|date:"W" }}: {{ minus_one_start_week }} - {{ minus_one_end_week }}</a>
+                    <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=current_start_week|date:"d-m-Y" week_end=current_end_week|date:"d-m-Y" %}">
+                        W {{ current_end_week|date:"W" }}: {{ current_start_week }} - {{ current_end_week }}</a>
+                </div>
+        </div>
+        </td>
+        <td>
+            <div class="dropdown">
+                  <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    select week
+                  </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_four_start_month|date:"d-m-Y" week_end=minus_four_end_month|date:"d-m-Y" %}">
+            {{ minus_four_end_month|date:"F" }}</a>
+        <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_three_start_month|date:"d-m-Y" week_end=minus_three_end_month|date:"d-m-Y" %}">
+            {{ minus_three_end_month|date:"F" }}</a>
+        <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_two_start_month|date:"d-m-Y" week_end=minus_two_end_month|date:"d-m-Y" %}">
+            {{ minus_two_end_month|date:"F" }}</a>
+        <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_one_start_month|date:"d-m-Y" week_end=minus_one_end_month|date:"d-m-Y" %}">
+            {{ minus_one_end_month|date:"F" }}</a>
+        <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=current_start_month|date:"d-m-Y" week_end=current_end_month|date:"d-m-Y" %}">
+            {{ current_start_month|date:"F" }}</a>
+          </div>
+        </div>
+        </td>
+    </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div align="center"><h4>No temporary workers assigned to this location</h4></div>
+{% endif %}
+</html>
+{% endblock %}

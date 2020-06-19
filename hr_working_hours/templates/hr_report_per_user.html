@@ -1,0 +1,167 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    {% load aux_calculations %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Godziny pracy</title>
+    <link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/datables/datatables.js"></script>
+    <script type="text/javascript" src="/static/js/scripts.js"></script>
+    <script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tabela').dataTable();
+			});
+		</script>
+    <style type="text/css" media="print">
+        .buttons, .glyphicon, .header {
+            visibility: hidden;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<p>
+    <div class="buttons">
+<a href="{% url 'hr_working_hours:hr_reports' %}" type="button" class="btn btn-outline-primary">
+    <i class="fas fa-list"></i> back</a>
+
+    <a href="{% url 'hr_working_hours:MyWorkersInLocCreateSingle' worker=worker %}?next={{ request.path|urlencode }}"
+               data-toggle="modal" data-target="#createModal" type="button" class="btn btn-primary">
+                    <i class="fa fa-edit"></i> new event</a>
+
+    <a href="{% url 'hr_working_hours:time_diff' user=worker week_start=week_start week_end=week_end %}?next={{ request.path|urlencode }}"
+               type="button" class="btn btn-primary"><i class="far fa-clock"></i> calculate working time</a>
+
+    <a href="{% url 'hr_working_hours:zero_extra_hours' user=worker week_start=week_start week_end=week_end %}?next={{ request.path|urlencode}}"
+               type="button" class="btn btn-primary"><i class="fas fa-eraser"></i> delete over hours</a>
+
+    <button type='button' onClick='window.print()' class='btn btn-primary' value='print'>
+        <i class="fas fa-print"></i> print</button>
+
+    <button type="button" value="select table" class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+            title="copied to clipboard" onclick="selectElementContents( document.getElementById('table') );">
+        <i class="fas fa-clipboard-list"></i> to clipboard</button>
+    </div>
+</p>
+
+<div id="table">
+{% regroup reports by entry_time|date:"j" as reports_by_day %}
+summary for period: {{ start|date:"j F o" }} - {{ end|date:"j F o" }} | worker: {{ worker }} [{{ worker|find_manager }}] |
+    company: {{ worker|find_company }} | {% if worker|find_last_day != 'nie ustalono' %} last day of work:
+    {{ worker|find_last_day }}
+    <a href="{% url 'hr_working_hours:last_day_edit' id=worker|find_last_day_id %}?next={{ request.path|urlencode}}"
+       data-toggle="modal" data-placement="top" data-target="#lastDayModal" title="change last day of work">
+        <i class="fa fa-edit"></i>
+    </a>
+    {% else %}
+    last day of work: not found <a href="{% url 'hr_working_hours:last_day_create' %}?next={{ request.path|urlencode}}"
+       data-toggle="modal" data-placement="top" data-target="#lastDayModal"
+       title="create last day of work"><i class="fa fa-edit"></i>
+    </a>
+    {% endif %}
+    <p>
+        <table class="table table-striped table-bordered" id="table">
+            <thead>
+                <tr>
+                    <th>entry</th>
+                    <th>leave</th>
+                    <th>sum</th>
+                    <th>over hours</th>
+                    <th>accepted?</th>
+                    <th>holiday?</th>
+                    <th>calculate/zero time</th>
+                    <th>accepted by</th>
+                    <th class="header">edit</th>
+                </tr>
+            </thead>
+        <tbody>
+            {% for day in reports_by_day %}
+            {% for item in day.list %}
+                <tr>
+                <td>{% if item.id %}{{ item.entry_time|date:"j.m.Y H:i" }}{% else %}{{ item|date:"j.m.Y" }} ({{ item|date:"l" }}){% endif %}</td>
+                <td>{{ item.leaving_time|default_if_none:"brak"|date:"j.m.Y H:i" }}</td>
+                <td>
+                    {{ item.total_time|default_if_none:"-" }}
+                </td>
+                <td>{{ item.extra_time|default_if_none:"0:00:00" }}</td>
+                <td>{{ item.accepted|yesno }}</td>
+                <td>{{ item.holiday|yesno }} {{ item.holiday_type|default_if_none:""|truncatechars:7|cut:"..." }}</td>
+                <td>{% if item.id %}
+                    <a href="{% url 'hr_working_hours:time_diff_inline' id=item.id %}?next={{ request.path|urlencode}}"
+                       data-toggle="zero_extra_hours" data-placement="top" title="calculate working time" type="button"
+                       class="btn btn-primary">
+                        <i class="far fa-clock"></i>
+                    </a>
+                    <a href="{% url 'hr_working_hours:zero_extra_hours_inline' id=item.id %}?next={{ request.path|urlencode}}"
+                       data-toggle="zero_extra_hours" data-placement="top"
+                       title="delete over hours" type="button" class="btn btn-primary">
+                        <i class="fas fa-eraser"></i>
+                    </a>
+                    <a href="{% url 'hr_working_hours:accept_entry_inline' id=item.id %}?next={{ request.path|urlencode}}"
+                       data-toggle="accept_entry" data-placement="top" title="accept/refuse"
+                       type="button" class="btn btn-primary">
+                        {% if not item.accepted_by %}
+                            <i class="far fa-check-circle"></i>
+                        {% elif item.accepted_by != 'no acceptance' %}
+                            <i class="fas fa-eraser"></i>
+                        {% endif %}
+                    </a>{% endif %}
+                </td>
+                <td>{{ item.accepted_by|default_if_none:"no acceptance" }}</td>
+                <td>{% if item.id %}
+                    <a class="header" href="{% url 'hr_working_hours:MyWorkersInLocEditSingle' pk=item.id%}?next={{ request.path|urlencode }}"
+                data-toggle="modal" data-target="#editModal">
+                    <i class="fa fa-edit"></i>
+                    </a>{% endif %}
+                </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+            </tbody>
+
+        </table>
+    </p>
+    <div class="input-group col-md-2">
+                <span class="input-group-addon" id="basic-addon1">basic time in this period:</span>
+                <div type="text" id="result" aria-describedby="basic-addon1" class="form-control" ></div>
+        <span class="input-group-addon" id="basic-addon1">over time in this period:</span>
+                <div type="text" id="result_extra" aria-describedby="basic-addon1" class="form-control" ></div>
+                <span class="input-group-addon" id="basic-addon1">days off sum:</span>
+                <div type="text" id="holiday" aria-describedby="basic-addon1" class="form-control">
+                    {{ worker|days_off|default_if_none:"0" }}
+                </div>
+        </div>
+</div>
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="lastDayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>edit record</title>
+
+<!-- bootstrap -->
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
+<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+</head>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select2").selectize({
+                plugins: ['remove_button']
+
+                });
+            });
+
+    </script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tabela').dataTable({
+
+                });
+			} );
+		</script>
+<body>
+
+    <form method="post" class="edit">
+    {% csrf_token %}
+    <input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="1">
+            <input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="1">
+            <p><label for="id_location">location:</label>
+                <select class="select2" id="id_location" name="location" style="width: 400px">
+                    {% for n in edit %}
+                       <option value="{{ n.id }}" disabled="disabled" selected="selected">{{ n.location }}</option>
+                    {% endfor %}
+                </select></p>
+        <p>
+            <label for="id_form-0-shortsign">shortsign:</label>
+            <select class="select2" multiple="multiple" id="id_form-0-shortsign" name="form-0-shortsign"  style="width: 400px">
+                {% for n in responsibles_selected %}
+                    <option value="{{ n.id }}" selected="selected">{{ n.username }}</option>
+                {% endfor %}
+                {% for n in managers %}
+                    <option value="{{ n.id }}">{{ n.username }}</option>
+                {% endfor %}
+            </select>
+            <input id="id_form-0-id" name="form-0-id" type="hidden" value="{{ id }}">
+        </p>
+               <button class='btn btn-primary' type="submit">save</button>
+               <a class='btn btn-secondary' href="{% url 'core:responsible_all' %}">back</a>
+
+    </form>
+<br>
+
+
+</body>
+</html>
+{% endblock %}

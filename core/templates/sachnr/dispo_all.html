@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Dispo</title>
+   <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+		<script type="text/javascript" src="/static/js/bootstrap.js.map"></script>
+		<script type="text/javascript" src="/static/datables/datatables.min.js"></script>
+
+</head>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tabela').dataTable({
+
+                });
+			} );
+		</script>
+<body>
+<br/>
+<p><a href="{% url 'core:main' %}" type="button" class="btn btn-outline-primary">main page</a></p>
+
+<table class="table table-striped table-bordered" id="tabela">
+	<thead>
+		<tr>
+			<th>dispo</th>
+            <th>ekg</th>
+            <th>usuń</th>
+        </tr>
+	</thead>
+	<tbody>
+    {% for n in dispo_all %}
+		<tr>
+            <td>{{ n.name }}
+                <a href="{% url 'core:edit_dispo' pk=n.id %}"><i class="fa fa-edit"></i></a>
+            </td>
+            <td>{{ n.ekg }}</td>
+            <td><a href="{% url 'core:dispo_delete' pk=n.id %}"><i class="fa fa-trash-alt"></i></a></td>
+
+		</tr>
+    {% endfor %}
+</table>
+<div class="col-md-4 column">
+<form method="post">
+    {% csrf_token %}
+<p><label for="id_name">Name:</label>
+    <input class="form-control" id="id_name" maxlength="25" name="name" type="text"></p>
+<p><label for="id_ekg">Ekg:</label>
+    <input class="form-control" id="id_ekg" maxlength="25" name="ekg" type="text"></p>
+    <button class="btn btn-primary" type="submit">Zapisz</button>
+    <a href="{% url 'core:main' %}" type="button" class="btn btn-secondary">Anuluj</a>
+</form>
+    </div>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+{% load  reports_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anulacja zamówionych obiadów</title>
+</head>
+<!-- datatables CSS -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+
+<!-- datatables JS -->
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+
+<!-- bootstrap -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#report').dataTable({
+        });
+    } );
+</script>
+<body>
+<br/>
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="report">
+	<thead>
+		<tr>
+            <th>date</th>
+            <th>client</th>
+            <th>personal number</th>
+			<th>deetails</th>
+			<th>quantity</th>
+			<th>unit price</th>
+  		</tr>
+	</thead>
+	<tbody>
+		{% for n in orders %}
+            <tr>
+            <td>{{ n.order.date }}</td>
+            <td>{{ n.order.user.username }}</td>
+            <td>{{ n.order.user_id|find_pers_number }}</td>
+            <td>{{ n.product.product.name }}</td>
+            <td>{{ n.quantity }}</td>
+            <td>{{ n.product.product.price }}</td>
+            </tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% if perms.stolowka.draw_report and strfrom|date:"Y-m-d 09:00" > cancellation_time|date:"Y-m-d H:i" %}
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_prompt">delete all</button>
+    {% else %}
+    <h5>It's after 9.30 - order cancellation for today is no longer possible</h5>
+    {% endif %}
+        <a href="{% url 'canteen:stolowka_reports' %}" type="button" class="btn btn-secondary">back</a>
+
+
+<!-- delete event -->
+    <script>
+        $('#delete_prompt').modal('show');
+    </script>
+    <div class="container">
+  <!-- Trigger the modal with a button -->
+  <div id="delete_prompt" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <b>Are you sure you want to delete the orders?</b>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+    <div class="modal-footer">
+    <a href="{% url 'canteen:confirm_cancel_orders' from_date to_date user_id %}" type="button"
+                   class="btn btn-danger">yes, delete</a>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">no</button>
+    </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
+{% endblock %}

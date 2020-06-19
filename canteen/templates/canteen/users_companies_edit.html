@@ -1,0 +1,229 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edytuj klienta stołówki</title>
+</head>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<!-- form styling -->
+<link rel="stylesheet" type="text/css" href="/static/css/user_companies_edit.css">
+
+<body>
+<div class="row">
+    <div class="column">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <p>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a href="{% url 'hr_working_hours:hr_reports' %}" type="button" class="btn btn-secondary">Cancel</a>
+    </p>
+</form>
+    </div>
+<div class="column manager">
+    {% if active_passive == True %}
+    <a class="btn btn-danger" id="status" href="{% url 'canteen:deactivate_user' user.id %}">deactivate user</a>
+    {% else %}
+    <a class="btn btn-info" id="status" href="{% url 'canteen:activate_user' user.id %}">activate user</a>
+    <a class="btn btn-secondary" href="{% url 'hr_working_hours:hr_reports' %}">back</a>
+    {% endif %}
+
+        <div class="card">
+        <div class="card-header">
+            <p>manager: {% for n in get_manager %}{{ n.manager }}{% endfor %}</p>
+        </div>
+        <div class="card-body">
+        <label>change manager:</label>
+            <select id="id_manager"></select>
+        <br>
+        </div>
+        <div class="card-footer">
+        <a id="link" type="button" class="btn btn-success">change</a>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+function createEvent(obj, eventName, functionToInvoke)
+    {
+        if (document.addEventListener)
+            obj.addEventListener(eventName, functionToInvoke);
+        else
+            obj.attachEvent("on"+eventName, functionToInvoke);
+    }
+
+    $(document).ready(function () {
+        var manager_button = document.getElementById("link");
+        var shortsign = document.getElementById("id_shortsign");
+        var pers_number = document.getElementById("id_pers_number");
+        var company = document.getElementById("id_company");
+        var card = document.getElementById("id_card");
+        var card_original = document.getElementById("id_card_original");
+        var temp_card_date = document.getElementById('id_temp_card_date');
+        var last_day = document.getElementById('id_last_day');
+        var first_day = document.getElementById('id_first_day');
+        var manager = document.getElementById('id_manager');
+        shortsign.value="{{ user.username }}";
+        pers_number.value="{{ pers_number }}";
+        company.value="{{ company.company_id }}";
+        card.value = "{{ company.card|default_if_none:"" }}";
+        card_original.value="{{ company.card_original|default_if_none:"" }}";
+        temp_card_date.value="{{ company.temp_card_date|date:"d.m.Y"|default_if_none:"" }}";
+        last_day.value="{{ last_day.last_day|date:"d.m.Y" }}";
+        first_day.value="{{ last_day.first_day|date:"d.m.Y" }}";
+        manager.value="{{ get_manager.manager_id }}";
+        manager_button.setAttribute("hidden", "hidden");
+        var list;
+        list = document.querySelectorAll("[name='shortsign'], [name='company'], [name='card'], [name='temp_card_date']," +
+            "[name='card_original'], [name='pers_number'], [name='first_day'], [name='last_day']");
+        for (var i = 0; i < list.length; ++i) {
+            list[i].classList.add('form-control');
+        }
+
+        if (document.getElementById("status").classList.value==="btn btn-info") {
+            for (var x = 0; x < list.length; ++x) {
+                list[x].readOnly=true;
+            }
+            company.disabled=true;
+        }
+        $("ul.errorlist").hide();
+
+        $("form").bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+        $("#id_temp_card_date, #id_first_day, #id_last_day").datetimepicker( {
+                    format: 'd.m.Y',
+                    lang: 'pl',
+                    pickTime: false,
+                    timepicker: false,
+                    weeks: true,
+                    dayOfWeekStart: 1,
+                    closeOnDateSelect:true
+                });
+    });
+    $('#id_manager').selectize({
+            valueField: 'id',
+            labelField: 'username',
+            searchField: 'username',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'core:users_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value) {
+                var manager_button = document.getElementById("link");
+                var id = value;
+                var url =  '{% url 'hr_working_hours:ManToWork' user.id '000' %}';
+                url = url.replace(/000/, id);
+                document.getElementById("link").setAttribute("href", url);
+                manager_button.removeAttribute("hidden")
+            }
+        });
+</script>
+{% if duplicate != 0 %}
+    <script>
+            $(window).on('load', function () {
+                $('#myModal').modal('show');
+            });
+    </script>
+<style>
+.modal-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+    }
+</style>
+
+<script src="/static/js/bootstrap.min.js"></script>
+
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <br>
+        <h4 class="modal-title"></h4>
+      </div>
+        <div class="modal-body">
+        {% if duplicate != 0 %}
+            {% if duplicate_name %}
+          <p>
+            <b>The user {{ duplicate_name }} already exists</b>
+          </p>
+            <div class="modal-footer">
+            Would you like to edit the user?
+          <a href="{% url 'canteen:user_companies_edit' duplicate_name.id %}" type="button"
+                   class="btn btn-info">yes</a>
+          <a type="button" class="btn btn-danger" data-dismiss="modal">no</a>
+        </div>
+                {% endif %}
+            {% if duplicate_pers_number %}
+          <p>
+            <b>The number {{ duplicate_pers_number.pers_number }} is already assigned to {{ duplicate_pers_number.user }}</b>
+          </p>
+                <div class="modal-footer">
+            Would you like to edit the user?
+          <a href="{% url 'canteen:user_companies_edit' duplicate_pers_number.user.id %}" type="button"
+                   class="btn btn-info">yes</a>
+          <a type="button" class="btn btn-danger" data-dismiss="modal">no</a>
+    </div>
+                {% endif %}
+            {% if duplicate_card_number %}
+          <p>
+            <b>This card number is already assigned to {{ duplicate_card_number.user }}</b>
+          </p>
+                <div class="modal-footer">
+            Would you like to edit the user?
+          <a href="{% url 'canteen:user_companies_edit' duplicate_card_number.user.id %}" type="button"
+                   class="btn btn-info">yes</a>
+          <a type="button" class="btn btn-danger" data-dismiss="modal">no</a>
+    </div>
+                {% endif %}
+      {% endif %}
+
+</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endif %}
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+{% block content %}
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    </head>
+	<body>
+
+<form action="{% url 'canteen:dishes_edit' pk=edit.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Dodaj nową instrukcję</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+    {{ form.as_p }}
+      </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">Zapisz</button>
+                <a href="{% url 'kable_instrukcje:lista' %}" type="button" class="btn btn-dark" data-dismiss="modal"
+                    aria-label="Close">Anuluj</a>
+      </div>
+</div>
+
+</form>
+	</body>
+</html>
+{% endblock %}

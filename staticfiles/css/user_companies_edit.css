@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+}
+
+.column {
+    /*float: left;*/
+    /*width: 50%;*/
+    padding: 20px;
+    /*height: 300px;*/
+    flex: 50%;
+}
+
+.manager {
+    padding-left: 40px;
+    width: 30%;
+}
+
+.row {
+    display: flex;
+}
+
+/*.row:after {*/
+/*  content: "";*/
+/*  display: table;*/
+/*  clear: both;*/
+/*}*/
+

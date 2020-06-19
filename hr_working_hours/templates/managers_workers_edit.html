@@ -1,0 +1,56 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kierownicy i pracownicy</title>
+</head>
+<body>
+
+<form action="{% url 'managers_workers_edit' id=edit.id %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+<div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                </div>
+   <div class="col-md-4 column">
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label for="id_manager">kierownik:</label>
+        <select class="select" id="id_manager" name="manager">
+        <option value="{{ edit.manager_id }}" selected="selected">{{ edit.manager }}</option>
+            {% for n in managers_diff %}
+                <option value="{{ n.id }}">{{ n.username }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="id_worker">pracownicy:</label>
+        <select class="select2" id="id_worker" name="worker">
+        <option value="{{ edit.worker_id }}" selected="selected">{{ edit.worker }}</option>
+{#                {% for n in workers_diff %}#}
+{#                    <option value="{{ n.id }}">{{ n.username }}</option>#}
+{#                {% endfor %}#}
+        </select>
+    </p>
+</form>
+   </div>
+                    <div class="modal-footer">
+            <p>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                <button class="btn btn-primary" type="submit">
+                    <span class="glyphicon glyphicon-floppy-save"></span> Zapisz</button>
+                <a href="{{ previous_page }}" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-log-out"></span> Anuluj</a>
+                <button class="btn btn-warning" type="reset">
+                    <span class="glyphicon glyphicon-repeat"></span> Resetuj</button>
+            </p>
+                </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
+{% endblock %}

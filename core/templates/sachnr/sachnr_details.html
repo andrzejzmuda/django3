@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tabela').dataTable({
+
+        });
+    } );
+</script>
+<form method="post">
+    {% csrf_token %}
+
+    <p><label for="sachnr">Sachnr:</label>
+        <input class="form-control" id="sachnr" maxlength="150" type="text" value="{{ sachnr_details.sachnr }}"></p>
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a href="{% url 'core:sachnr_select_detailed_view' %}" type="button" class="btn btn-secondary">Cancel</a>
+</form>
+
+
+</body>
+</html>
+{% endblock %}

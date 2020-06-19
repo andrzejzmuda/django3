@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HR Reports</title>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('body').on('click', '[data-toggle="modal"]', function(){
+                        $($(this).data("target")+' .modal-dialog').load($(this).data("remote"));
+                    });
+        })
+    </script>
+</head>
+<body>
+<br>
+<p>
+<a href="{% url 'hr_working_hours:main' %}"
+   type="button" class="btn btn-outline-primary"><i class="fas fa-list"></i> back</a>
+</p>
+<p>
+    <a href="{% url 'core:NewUserS1' %}" type="button" class="btn btn-secondary">
+        <i class="fa fa-edit"></i> new worker
+    </a>
+
+<button type="button" class="btn btn-secondary" data-toggle="modal"
+        data-remote="{% url 'hr_working_hours:hr_report_edit_worker_modal' %}" data-target="#hrModal">
+    <i class="fa fa-edit"></i> edit worker</button>
+</p>
+<p>
+    <a href="{% url 'hr_working_hours:last_day_list' %}"
+                   type="button" class="btn btn-secondary">
+        <i class="fas fa-book"></i> first and last day of work
+    </a>
+</p>
+
+<button type="button" class="btn btn-primary" data-toggle="modal"
+        data-remote="{% url 'hr_working_hours:hr_report_per_company_modal' %}" data-target="#hrModal">
+    <i class="fas fa-book"></i> report for a <b>company</b> for a period</button>
+
+<button type="button" class="btn btn-primary" data-toggle="modal"
+        data-remote="{% url 'hr_working_hours:hr_report_per_location_modal' %}" data-target="#hrModal">
+    <i class="fas fa-book"></i> report for a <b>location</b> for a period</button>
+
+<button type="button" class="btn btn-primary" data-toggle="modal"
+        data-remote="{% url 'hr_working_hours:hr_report_per_manager_modal' %}" data-target="#hrModal">
+    <i class="fas fa-book"></i> report for a <b>manager</b> for a period</button>
+
+<button type="button" class="btn btn-primary" data-toggle="modal"
+        data-remote="{% url 'hr_working_hours:hr_report_per_user_modal' %}" data-target="#hrModal">
+    <i class="fas fa-book"></i> report for a <b>worker</b> for a period</button>
+
+
+<div class="modal fade" id="hrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

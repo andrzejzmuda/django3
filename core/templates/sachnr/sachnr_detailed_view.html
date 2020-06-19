@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sachnr podgląd szczegółów</title>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+
+</head>
+
+<body>
+<a type="button" class="btn btn-outline-secondary" href = {% url 'core:main' %}>Back</a>
+
+<div>
+<h5>Select Sachnummer:</h5>
+    <select id="sachnr" style="width: 400px"></select>
+
+</div>
+
+<script>
+    var $sachnr = $('#sachnr').selectize({
+            valueField: 'sachnr',
+            labelField: 'sachnr',
+            searchField: 'sachnr',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'core:serialize_sachnr' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value) {
+                var id = value;
+                var url = '{% url 'core:edit_sachnr' 0 %}';
+                url = url.replace(0, id);
+                document.getElementById("link").setAttribute("href", url);
+
+            }
+        });
+</script>
+
+<a id="link" type="button" class="btn btn-success">wyświetl szczegóły</a>
+</body>
+</html>
+{% endblock %}

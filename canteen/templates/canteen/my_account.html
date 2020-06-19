@@ -1,0 +1,78 @@
+{% load static %}
+{% block content %}
+<html>
+ <!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>moje wydatki</title>
+</head>
+
+<body>
+
+<form action="{% url 'canteen:my_account' %}" enctype="multipart/form-data" method="post" class="upload">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">moje wydatki</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body" style="margin: 10px;">
+                <h5>Expenses summary:</h5>
+                <h5>{{ today|date:"F Y" }}</h5>
+                    <ul>
+                        <li>my cost this month: {{ cost.user_monthly|floatformat:2  }} PLN</li>
+                        <li>subsidy cost: {{ company.company_user|floatformat:2 }} PLN</li>
+                        <li>total cost of my orders: {{ total.total|floatformat:2 }} PLN</li>
+                    </ul>
+
+                <table class="table table-striped table-bordered"
+                    style="table-layout: fixed" id="menu_table" width="300 px">
+                <thead>
+                <tr>
+                    <th>date</th>
+                    <th>price 100%</th>
+                    <th>your price</th>
+                    <th>discount</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for n in sum_up %}
+                    <tr>
+                        <td>{{ n.date }}</td>
+                        <td>{{ n.per_order }}</td>
+                        <td>{{ n.user_cost|floatformat:2 }}</td>
+                        <td>{{ n.company_cost|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+                {% if sum_up_last_month %}
+                <h5>{{ last_month|date:"F Y" }}</h5>
+                    <ul>
+                        <li>my cost last month: {{ cost_last.user_monthly|floatformat:2  }} PLN</li>
+                        <li>subsidy cost: {{ company_last.company_user|floatformat:2 }} PLN</li>
+                        <li>total cost of my orders: {{ total_last.total|floatformat:2 }} PLN</li>
+                    </ul>
+                {% endif %}
+            </div>
+        <div class="modal-footer">
+            <p>
+            <button type="button" class="close" data-dismiss="modal">close</button>
+            </p>
+        </div>
+
+                </div>
+    </div>
+</form>
+
+</body>
+</html>
+{% endblock %}

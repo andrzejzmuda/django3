@@ -1,0 +1,47 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>How many dishes left?</title>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/datables/datatables.js"></script>
+
+<div class="modal-content">
+      <div class="modal-header">
+            <h5>remaining dishes for the day {{ today }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+            </button>
+      </div>
+<div class="modal-body">
+    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"
+    style="table-layout: fixed" id="menu_table" width="300 px">
+        <thead>
+        <tr>
+            <th>dish</th>
+            <th>quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for n in dishes_list %}
+        <tr>
+            <td>{{ n.product__product__name }}</td>
+            <td>{{ n.quantity }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <a type="button" class="btn btn-secondary btn-lg btn-block" href="{% url 'canteen:diner_front' %}">close</a>
+</div>
+</div>
+</body>
+</html>
+{% endblock %}

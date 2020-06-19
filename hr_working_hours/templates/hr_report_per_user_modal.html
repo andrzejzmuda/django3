@@ -1,0 +1,100 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Reports</title>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+</head>
+<body>
+<form action="{% url 'hr_working_hours:hr_report_per_user_modal' %}" method="post" enctype="multipart/form-data">
+  <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">draw a report for a period:</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                    <div style="column-count: 1">
+                        <p>
+                        from:
+                            <input id="id_report_from_worker" class="form-control" name="report_from_worker" type="text">
+                        to:
+                            <input id="id_report_to_worker" class="form-control" name="report_to_worker" type="text">
+                        </p>
+                        worker:
+                            <select id="worker" style="width: 400px"></select>
+                    </div>
+                  </div>
+                <div class="modal-footer">
+                        <a id="link_worker" type="button" class="btn btn-info">
+                            <i class="fas fa-search"></i> search
+                        </a>
+                </div>
+      </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+    $('#id_report_from_worker, #id_report_to_worker').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var worker = $('#worker').selectize({
+            valueField: 'id',
+            labelField: 'username',
+            searchField: 'username',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'core:users_temp_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, id_report_from, id_report_to) {
+                var worker = value;
+                var from = document.getElementById("id_report_from_worker").value;
+                var to = document.getElementById("id_report_to_worker").value;
+                var url = '{% url 'hr_working_hours:hr_report_per_user' '66' '77-77-7777' '88-88-8888' %}';
+                url = url.replace(/66/, worker);
+                url = url.replace(/77-77-7777/, from);
+                url = url.replace(/88-88-8888/, to);
+                document.getElementById("link_worker").setAttribute("href", url);
+
+            }
+        });
+</script>
+</body>
+</html>
+{% endblock %}

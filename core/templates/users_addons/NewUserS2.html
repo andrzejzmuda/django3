@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User 2/3</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+<body>
+<form action="{% url 'core:NewUserS2' shortsign=shortsign %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+    <div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                    <h4>New user 2/3</h4>
+                    {{ kzz }} <h5>
+                    <a href="{% url 'core:PrintCard' shortsign %}" type="button" class="btn btn-outline-info">
+                        <i class="fas fa-credit-card"></i> print card
+                    </a>
+                    </h5>
+                </div>
+        <div class="modal-body">
+            <label for="id_card">scan a card here:</label>
+            {{ form.card_original }}
+        </div>
+      <div class="modal-footer">
+            <p>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save and proceed</button>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+
+            </p>
+                </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+        $(document).ready(function() {
+                var list = document.querySelectorAll("input[name='card_original']");
+                for (var i=0; i < list.length; i++) {
+                    list[i].classList.add('form-control')
+                }
+                $("form").bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+            });
+</script>
+</body>
+</html>
+{% endblock %}

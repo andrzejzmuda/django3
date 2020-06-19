@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- datatables CSS -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+
+<!-- datatables JS -->
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+
+<!-- bootstrap -->
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#report').dataTable({
+        });
+    } );
+</script>
+<h3>orders for the day {{ day }}</h3>
+<p>
+<a type="button" class="btn btn-primary" href="{% url 'canteen:orders_for_the_day_csv' day %}">
+    <i class="fas fa-file-csv"></i> to csv</a>
+</p>
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="report">
+	<thead>
+		<tr>
+			<th>dish</th>
+			<th>quantity</th>
+  		</tr>
+	</thead>
+	<tbody>
+		{% for n in dishes_list %}
+            <tr>
+        	<td>{{ n.product__product__name }}</td>
+            <td>{{ n.quantity }}</td>
+            </tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+<a type="button" class="btn btn-secondary" href="{% url 'canteen:stolowka_reports' %}">back</a>
+</body>
+</html>
+{% endblock %}

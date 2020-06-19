@@ -1,0 +1,100 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Reports</title>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+</head>
+<body>
+<form action="{% url 'hr_working_hours:hr_report_per_company_modal' %}" method="post" enctype="multipart/form-data">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">draw a company report for a period:</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            <p>from:
+            <input id="id_report_from" class="form-control" name="report_from" type="text"> to:
+            <input id="id_report_to" class="form-control" name="report_to" type="text"></p>
+            company: <select id="company" style="width: 400px"></select>
+            </select>
+        </div>
+      </div>
+        <div class="modal-footer">
+            <a id="link" type="button" class="btn btn-info"><i class="fas fa-search"></i> search</a>
+            <a id="link_csv" type="button" class="btn btn-info"><i class="fas fa-file-csv"></i> to CSV</a>
+        </div>
+      </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+    $('#id_report_from, #id_report_to').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var company = $('#company').selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'hr_working_hours:company_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, id_report_from, id_report_to) {
+                var company = value;
+                var from = document.getElementById("id_report_from").value;
+                var to = document.getElementById("id_report_to").value;
+                var url = '{% url 'hr_working_hours:hr_report_per_company' '55' '33-33-3333' '44-44-4444' %}';
+                var url_csv = '{% url 'hr_working_hours:download_csv' '55' '33-33-3333' '44-44-4444'%}';
+                url = url.replace(/55/, company);
+                url = url.replace(/33-33-3333/, from);
+                url = url.replace(/44-44-4444/, to);
+                url_csv = url_csv.replace(/55/, company);
+                url_csv = url_csv.replace(/33-33-3333/, from);
+                url_csv = url_csv.replace(/44-44-4444/, to);
+                document.getElementById("link").setAttribute("href", url);
+                document.getElementById("link_csv").setAttribute("href", url_csv);
+            }
+        });
+      })
+</script>
+</body>
+</html>
+{% endblock %}

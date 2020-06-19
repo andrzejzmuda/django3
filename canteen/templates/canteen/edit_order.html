@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit order</title>
+    <link rel="stylesheet" type="text/css" href="/static/stolowka/css/dataTables.bootstrap.css">
+<script type="text/javascript" language="javascript" src="/static/stolowka/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="/static/stolowka/js/dataTables.bootstrap.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/stolowka/css/selectize.css"/>
+<!--selectize JS -->
+<script language="JavaScript" type="text/javascript" src="/static/stolowka/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/stolowka/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/stolowka/js/jquery.datetimepicker.js"></script>
+<!-- dynamic-formset -->
+<script src="/static/stolowka/js/dynamic-formset.js"></script>
+</head>
+<body>
+
+{#<a href="{% url 'orders' %}" class="btn btn-primary" role="button">Orders</a>#}
+{#<a href="{% url 'sides' %}" class="btn btn-primary" role="button">Sides</a>#}
+{#<a href="{% url 'menu' %}" class="btn btn-primary" role="button">Menu</a>#}
+
+{#<p>#}
+{#{{ form.as_p }}#}
+{#    {{ formset.as_p }}#}
+{#</p>#}
+{##}
+{#{% for n in edit_dishes %}#}
+{#<ul>{{ n.dish }}</ul>#}
+{#{% if n.sides.values %}<li>{{ n.dish_id }}</li>{% endif %}#}
+{#{% endfor %}#}
+
+
+<form method="post" accept-charset="UTF-8" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <label for="id_date">data:</label>
+    <input id="id_date" name="date" type="text" value="{{ date }}">
+        <label for="id_user">user:</label>
+    <input id="id_user" name="user" type="text">
+        <label for="id_price">cena razem:</label>
+    <input id="id_price" name="price" type="text">
+
+    {% for n in edit %}
+        <p>
+    <label for="dish">dish:</label>
+        <input id="dish" name="'dish" type="text" value="{{ n.dish.name }}">
+    <label for="sides">sides:</label>
+        <select style="width: 300px" class="id_meal_set-0-sides" id="id_meal_set-0-sides" name="meal_set-0-sides" multiple="multiple">
+                                <option value="{{ n.sides }}" selected="selected">{{ n.sides.name }}</option>
+                        </select>
+        <label for="quantity">ilość:</label>
+        <input id="quantity" name="quantity" type="number" step="1" value="0">
+        <label for="dish_price">cena:</label>
+        <input id="dish_price" name="dish_price" value="{{ n.dish.price }}">
+        </p>
+    {% endfor %}
+
+{#    {{ form.user }}#}
+{#    {{ form.price }}#}
+{#{{ formset.management_form }}#}
+{#{% for item in edit_dishes %}#}
+{#    {{ formset.management_form }}#}
+{#    {% for form in formset %}#}
+{#        {{ form.as_p }}#}
+{#    {% endfor %}#}
+{##}
+{#{% endfor %}#}
+
+{#{{ formset.management_form }}#}
+{#    {% for form in formset %}#}
+{#        {{ form.id }}#}
+{#        <ul>#}
+{#            <li>{{ form.dish }}</li>#}
+{#            <li>{{ form.sides }}</li>#}
+{#        </ul>#}
+{#    {% endfor %}#}
+{#{{ formset.as_p }}#}
+
+    <button class="btn btn-default" type="submit">zapisz</button>
+</form>
+
+{{ a.values }}
+</body>
+</html>

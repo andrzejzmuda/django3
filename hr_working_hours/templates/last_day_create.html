@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>New contract period</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<body>
+<form action="{% url 'hr_working_hours:last_day_create' %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+<div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New contract period</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                <b>{{ form.worker.label }}</b>
+                    <select id="id_worker" name="worker" class="select">
+                        <option value="" selected="selected">---------</option>
+                        {% for n in workers_diff %}
+                            <option value="{{ n.id }}">{{ n.username }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p>
+                    <b>{{ form.first_day.label }}</b>
+                    {{ form.first_day }}
+                </p>
+                <p>
+                    <b>{{ form.last_day.label }}</b>
+                    {{ form.last_day }}
+                </p>
+            </div>
+{{ form.errors }}
+        <div class="modal-footer">
+                <p>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-save"></i> save</button>
+
+                    <a href="{{ previous_page }}" type="button" class="btn btn-danger">
+                        <i class="fas fa-window-close"></i> cancel</a>
+
+                    <button class="btn btn-warning" type="reset">
+                        <i class="fas fa-redo"></i> reset</button>
+
+                </p>
+                    </div>
+    </div>
+</form>
+<script>
+$(document).ready(function() {
+    $('#id_first_day, #id_last_day').datetimepicker({
+        format: 'd.m.Y',
+        lang: 'pl',
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1
+    });
+    $(document).ready(function() {
+                $(".select").selectize( {
+                });
+            });
+    var list;
+    list = document.querySelectorAll("input[name='last_day'], input[name='first_day']");
+    for (var i = 0; i < list.length; ++i) {
+        list[i].classList.add('form-control');
+    }
+    document.getElementById("id_worker").previousElementSibling.innerHTML = "worker";
+    document.getElementById("id_first_day").previousElementSibling.innerHTML = "first day at work";
+    document.getElementById("id_last_day").previousElementSibling.innerHTML = "last day at work";
+})
+</script>
+</body>
+</html>

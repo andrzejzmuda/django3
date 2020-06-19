@@ -1,0 +1,100 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Reports</title>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+</head>
+<body>
+<form action="{% url 'hr_working_hours:hr_report_per_location_modal' %}" method="post" enctype="multipart/form-data">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">draw a location report for a period:</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            <p>
+                from:
+                <input id="id_report_from_location" class="form-control" name="report_from_location" type="text">
+                to:
+                <input id="id_report_to_location" class="form-control" name="report_to_location" type="text">
+            </p>
+                location:
+                <select id="location" style="width: 400px"></select>
+        <div class="modal-footer">
+            <a id="link_location" type="button" class="btn btn-info">
+                <i class="fas fa-search"></i> search
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+<script>
+    $(document).ready(function () {
+    $('#id_report_from_location, #id_report_to_location').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var location = $('#location').selectize({
+            placeholder: 'select location',
+            valueField: 'id',
+            labelField: 'detailed_location',
+            searchField: ['location', 'detailed_location'],
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'hr_working_hours:location_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, id_report_from_location, id_report_to_location) {
+                var location = value;
+                var from = document.getElementById("id_report_from_location").value;
+                var to = document.getElementById("id_report_to_location").value;
+                var url = '{% url 'hr_working_hours:hr_report_per_location' '55' '33-33-3333' '44-44-4444' %}';
+                url = url.replace(/55/, location);
+                url = url.replace(/33-33-3333/, from);
+                url = url.replace(/44-44-4444/, to);
+                document.getElementById("link_location").setAttribute("href", url);
+            }
+        });
+      });
+</script>
+</body>
+</html>
+{% endblock %}

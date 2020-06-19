@@ -1,0 +1,109 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>order processing</title>
+</head>
+<body>
+
+<br/>
+{% if order %}
+<table class="table" id="order">
+	<thead>
+		<tr>
+			<th>dish</th>
+			<th>quantity</th>
+			<th>price/unit</th>
+            <th>sold(?)</th>
+  		</tr>
+	</thead>
+	<tbody>
+		{% for n in order %}
+            {% if n.orderitems__product__product__name %}
+            <tr>
+        	<td>{{ n.orderitems__product__product__name }}</td>
+        	<td>
+                {% if n.orderitems__quantity > 0%}
+              <a type="button" href="{% url 'canteen:change_quantity' operator="minus" pk=n.orderitems__id %}">
+                  <i class="fas fa-minus"></i>
+              </a>
+                {% endif %}
+                <span id="quantity">{{ n.orderitems__quantity }}</span>
+              <a type="button" href="{% url 'canteen:change_quantity' operator="plus" pk=n.orderitems__id %}">
+                  <i class="fas fa-plus"></i>
+              </a>
+            </td>
+            <td>{{ n.orderitems__product__product__price }}</td>
+            <td>
+                {% if n.orderitems__sold == True %}
+                <a href="{% url 'canteen:sold_unsold' pk=n.orderitems__id %}">
+                   <i class="far fa-check-circle"></i>
+                </a>
+                {% else %}
+                    <a href="{% url 'canteen:sold_unsold' pk=n.orderitems__id %}">
+                   <i class="far fa-times-circle"></i>
+                </a>
+                {% endif %}
+            </td>
+            </tr>
+                {% else %}
+                <tr>
+                <td>This order is empty</td>
+                <td>0</td>
+                <td>0,00</td>
+                    <td> <i class="fas fa-lock"></i></td>
+                </tr>
+            {% endif %}
+		{% endfor %}
+	</tbody>
+
+</table>
+
+{% else %}
+<div style="text-align:center;">
+    <h3>no order for today</h3>
+    <a type="button" class="btn btn-danger btn-lg" href="{% url 'canteen:close_order' card %}">OK</a>
+</div>
+{% endif %}
+
+{% if price %}
+<div style="text-align:center;">
+    {% if get_discount != 100.0 %}
+    <p><b>{{ username }}, discount: {{ get_discount }}%</b></p>
+    <p><b>client's cost: {{ price.user_cost_total|floatformat:2 }}</b></p>
+    {% else %}
+    <p><b>{{ username }}, 100% discount, the company covers the expense</b></p>
+    {% endif %}
+    <a type="button" style="margin:35px;" class="btn btn-success btn-lg" href="{% url 'canteen:close_order' card %}">order complete</a>
+    <a type="button" style="margin:35px;" class="btn btn-danger btn-lg" href="{% url 'canteen:diner_front' %}">cancel</a>
+</div>
+{% endif %}
+
+<style>
+    b{
+        font-size: 250%;
+    }
+    th,h3{
+        font-size: 150%;
+        text-align: center;
+    }
+    td{
+        font-size: 200%;
+        text-align: center;
+        word-wrap: break-word;max-width: 450px;
+    }
+</style>
+<script>
+    list = document.querySelectorAll('[class="fas fa-minus"]');
+        for (var i = 0; i < list.length; ++i) {
+            list[i].parentElement.previousElementSibling.previousElementSibling.innerHTML='0';
+            list[i].parentElement.previousElementSibling.previousElementSibling.previousElementSibling.
+            style.setProperty("text-decoration", "line-through")
+        }
+</script>
+</body>
+</html>
+{% endblock %}

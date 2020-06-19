@@ -1,0 +1,39 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>delete dish</title>
+</head>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+    var list;
+    list = document.querySelectorAll("[name*='date'], [name*='product']");
+    for (var i = 0; i < list.length; ++i) {
+        list[i].classList.add('form-control');
+    }
+});
+</script>
+
+<body>
+
+<form action="{% url 'canteen:menu_delete' menu_item.id %}" enctype="multipart/form-data" method="post" class="upload">
+    {% csrf_token %}
+    <div class="modal-content">
+        <div class="modal-header">
+                <h4 class="modal-title">Delete this dish from the menu?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+                    <div class="modal-body">
+                            {{ form.as_p }}
+                    </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">usuń</button>
+                <a href="{{ next }}" type="button" class="btn btn-dark">anuluj</a>
+            </div>
+    </div>
+</form>
+
+</body>
+</html>
+{% endblock %}

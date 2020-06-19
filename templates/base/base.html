@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <title>Django 3 Apps</title>
+      <script src="/static/js/jquery-3.4.1.min.js"></script>
+      <link href="/static/css/bootstrap.css" rel="stylesheet">
+      <script src="/static/js/bootstrap.bundle.js"></script>
+      <script defer src="/static/icons/all.js"></script>
+  </head>
+
+  <body>
+  <br/>
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">My Apps in Django 3</a>
+          <button class="navbar-toggler" type="button"
+                  data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i><span class="sr-only">(current)</span></a>
+              </li>
+                {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Choose Application
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if perms.instructions %}
+                  <a class="dropdown-item" href="{% url 'instructions:lista' %}">Instructions</a>
+                    {% endif %}
+                {% if perms.core %}
+                  <a class="dropdown-item" href="{% url 'core:main' %}">Sachnummery</a>
+                  <a class="dropdown-item" href="{% url 'core:responsible_all' %}">Managers and Locations</a>
+                    {% endif %}
+                {% if perms.stolowka %}
+                    <a class="dropdown-item" href="{% url 'canteen:menu_all' %}"><b>Canteen</b></a>
+                {% endif %}
+                {% if perms.hr_working_hours %}
+                    <a class="dropdown-item" href="{% url 'hr_working_hours:main' %}"><b>HR Working Hours</b></a>
+                {% endif %}
+                </div>
+              </li>
+                {% endif %}
+            </ul>
+          <ul class="navbar-nav">
+                <li class="navbar-item">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {% if user.is_authenticated %}
+                  <p class="navbar-text navbar-right">Hello {{ user.username }}
+                      <a href="{% url 'logout' %}" class="navbar-light">
+                          <i class="fas fa-sign-out-alt"></i>
+                      </a>
+                  </p>
+                {% else %}
+                    <p class="navbar-text navbar-right">
+                        <a href="{% url 'login' %}" class="navbar-link">login
+                            <i class="fas fa-sign-in-alt"></i>
+                        </a>
+                    </p>
+                {% endif %}
+            </div>
+                </li>
+                </ul>
+              </div>
+    </nav>
+  {% block content %}{% endblock %}
+  </div>
+  </body>
+</html>

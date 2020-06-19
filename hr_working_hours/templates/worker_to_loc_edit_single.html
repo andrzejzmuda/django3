@@ -1,0 +1,105 @@
+{% load staticfiles %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<body>
+<div>
+    <form action="{% url 'hr_working_hours:worker_to_loc_edit_single' edit.id %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+<div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                    {{ edit.location }}
+                </div>
+        <div class="modal-body">
+        {% csrf_token %}
+            {{ form.errors }}
+            <p>
+    <label for="id_location">location:</label>
+        <select class="select" id="id_location" name="location">
+            <option value="{{ edit.location_id }}" selected="selected">{{ edit.location }}</option>
+            {% for n in locations_diff %}
+                <option value={{n.id}}>{{ n.location }} {{ n.detailed_location }}</option>
+            {% endfor %}
+
+        </select>
+    </p>
+    <p>
+        <label for="id_workers">workers:</label>
+        <select class="select2" multiple="multiple" id="id_workers" name="workers">
+        {% for n in edit.workers.all %}
+            <option value="{{ n.id }}" selected="selected">{{ n.username }}</option>
+        {% endfor %}
+            {% for n in workers_diff %}
+            <option value={{ n.id }}>{{ n.username }}</option>
+            {% endfor %}
+        </select>
+    </p>
+
+        </div>
+        <div class="modal-footer">
+        <p>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save</button>
+
+                <a href="{% url 'WorkerToLocEdit' %}" type="button" class="btn btn-secondary">
+                    <i class="fas fa-window-close"></i> cancel</a>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+
+                <a href="{% url 'WorkerToLocEditSingleDelete' id=edit.id %}" type="button" class="btn btn-danger">
+                    <i class="fa fa-trash-alt"></i> delete</a>
+
+            </p>
+        </div>
+    </div>
+</div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var list;
+        list = document.querySelectorAll("select[name='location']");
+        for (var i = 0; i < list.length; ++i) {
+            list[i].classList.add('select');
+        }
+    });
+
+    $(document).ready(function() {
+        var list;
+        list = document.querySelectorAll("select[name='workers']");
+        for (var i = 0; i < list.length; ++i) {
+            list[i].classList.add('select2');
+        }
+    });
+</script>
+<script type="text/javascript">
+        $(document).ready(function() {
+                $(".select2").selectize( {
+                    plugins: ['remove_button']
+                });
+            });
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select").selectize( {
+                });
+            });
+        </script>
+</body>
+</html>
+{% endblock %}

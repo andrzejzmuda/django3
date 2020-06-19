@@ -1,0 +1,206 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/datables/datatables.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+<!-- dynamic-formset -->
+<script src="/static/js/dynamic-formset.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#dishes_table').dataTable();
+            $('body').on('click', '[data-toggle="modal"]', function () {
+                $($(this).data("target") + ' .modal-dialog').load($(this).data("remote"));
+            });
+        });
+    </script>
+</head>
+<body>
+<br/>
+{% if perms.stolowka.change_menu %}
+	<a href="{% url 'canteen:users_admin' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: left">canteen's back</a>
+{% endif %}
+	{% if url == 'menu_all' %}
+    <a href="{% url 'canteen:next_week_menu' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: right">next week</a>
+    {% else %}
+    <a href="{% url 'canteen:menu_all' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: right">current week</a>
+    {% endif %}
+<h3>MENU</h3>
+<h4>from {{ start_week }} to {{ end_week }}</h4>
+
+    <a data-remote="{%  url 'canteen:my_account' %}" class="btn btn-info" type="button" style="vertical-align:top; float: left"
+       data-toggle="modal" data-target="#my_accountModal">my expenses</a>
+{% if perms.stolowka.diner_front %}
+    <a href="{% url 'canteen:diner_front' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: right">Service</a>
+{% endif %}
+<br/>
+<table class="table table-striped table-bordered"
+       style="table-layout: fixed" id="menu_table" width="300 px">
+<tbody>
+
+<tr>
+    <th>monday {{ monday }}</th>
+    <th>tuesday {{ tuesday }}</th>
+    <th>wednesday {{ wednesday }}</th>
+    <th>thursday {{ thursday }}</th>
+    <th>friday {{ friday }}</th>
+<tr>
+    <td>{% if monday_menu %}{% for n in monday_menu %}
+        <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
+            {% if perms.stolowka.delete_menu %}
+            <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
+                <i class="fa fa-trash-alt"></i>
+            </a>
+            {% endif %}
+        </p>
+    {% endfor %}{% endif %}</td>
+
+    <td>{% if tuesday_menu %}{% for n in tuesday_menu %}
+        <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
+            {% if perms.stolowka.delete_menu %}
+            <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
+                <i class="fa fa-trash-alt"></i>
+            </a>
+            {% endif %}
+        </p>
+    {% endfor %}{% endif %}</td>
+
+    <td>{% if wednesday_menu %}{% for n in wednesday_menu %}
+        <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
+            {% if perms.stolowka.delete_menu %}
+            <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
+                <i class="fa fa-trash-alt"></i>
+            </a>
+            {% endif %}
+        </p>
+    {% endfor %}{% endif %}</td>
+
+    <td>{% if thursday_menu %}{% for n in thursday_menu %}
+        <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
+            {% if perms.stolowka.delete_menu %}
+            <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal"><i class="fa fa-trash-alt"></i></a>
+            {% endif %}
+        </p>
+    {% endfor %}{% endif %}</td>
+
+    <td>{% if friday_menu %}{% for n in friday_menu %}
+        <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
+            {% if perms.stolowka.delete_menu %}
+            <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal"><i class="fa fa-trash-alt"></i></a>
+            {% endif %}
+        </p>
+    {% endfor %}{% endif %}</td>
+</tr>
+    <td align="center">
+        {% if monday_menu and monday|date:"Y-m-d 09:30" > order_time|date:"Y-m-d H:i" %}
+            <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:order' monday|date:"Y-m-d" %}?next={{ request.path|urlencode }}">
+            <i class="fas fa-utensils"></i> place order</a>{% endif %}
+    </td>
+    <td align="center">
+        {% if tuesday_menu and tuesday|date:"Y-m-d 09:30" > order_time|date:"Y-m-d H:i" %}
+            <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:order' tuesday|date:"Y-m-d" %}?next={{ request.path|urlencode }}">
+            <i class="fas fa-utensils"></i> place order</a>{% endif %}
+    </td>
+    <td align="center">
+        {% if wednesday_menu and wednesday|date:"Y-m-d 09:30" > order_time|date:"Y-m-d H:i" %}
+            <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:order' wednesday|date:"Y-m-d" %}?next={{ request.path|urlencode }}">
+            <i class="fas fa-utensils"></i> place order</a>{% endif %}
+    </td>
+    <td align="center">
+        {% if thursday_menu and thursday|date:"Y-m-d 09:30" > order_time|date:"Y-m-d H:i" %}
+            <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:order' thursday|date:"Y-m-d" %}?next={{ request.path|urlencode }}">
+            <i class="fas fa-utensils"></i> place order</a>{% endif %}
+    </td>
+    <td align="center">
+        {% if friday_menu and friday|date:"Y-m-d 09:30" > order_time|date:"Y-m-d H:i" %}
+            <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:order' friday|date:"Y-m-d" %}?next={{ request.path|urlencode }}">
+            <i class="fas fa-utensils"></i> place order</a>{% endif %}
+    </td>
+</tbody>
+</table>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".product").selectize( {
+                    plugins: ['remove_button']
+                });
+                $(".date").datetimepicker( {
+                    format: 'd.m.Y',
+                    lang: 'pl',
+                    pickTime: false,
+                    timepicker: false,
+                    weeks: true,
+                    dayOfWeekStart: 1,
+                    closeOnDateSelect:true
+                });
+            });
+        </script>
+<style>
+    h3, h4{
+       text-align: center;
+    }
+</style>
+{% if perms.stolowka.add_menu %}
+<form method="post">
+    <div class="col-md-4 column">
+            {% csrf_token %}
+            <p>
+                <label for="id_date">date:</label>
+                <input id="id_date" name="date" type="text" class="date form-control">
+            </p>
+            <p>
+                <label for="id_product">dishes list:</label>
+                <select class="product" id="id_product" name="product" multiple="multiple">
+                    <option value=""></option>
+                    {% for n in product %}
+                        <option value="{{ n.id }}">{{ n.name }} {{ n.sides.all }} {{ n.price }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <button class="btn btn-primary" type="submit">save</button>
+    </div>
+</form>
+{% endif %}
+
+<!-- modals -->
+<div id="menu_deleteModal" tabindex="-1" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+    </div>
+    </div>
+</div>
+
+<div id="menu_editModal" tabindex="-1" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+    </div>
+    </div>
+</div>
+
+<div class="modal fade" id="my_accountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

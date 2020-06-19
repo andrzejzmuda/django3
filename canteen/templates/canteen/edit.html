@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit</title>
+    <link rel="stylesheet" type="text/css" href="/static/stolowka/css/dataTables.bootstrap.css">
+<script type="text/javascript" language="javascript" src="/static/stolowka/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="/static/stolowka/js/dataTables.bootstrap.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/stolowka/css/selectize.css"/>
+<!--selectize JS -->
+<script language="JavaScript" type="text/javascript" src="/static/stolowka/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/stolowka/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/stolowka/js/jquery.datetimepicker.js"></script>
+<!-- dynamic-formset -->
+<script src="/static/stolowka/js/dynamic-formset.js"></script>
+</head>
+<body>
+{#	<a href="{% url 'dishes_all' %}" class="btn btn-primary" role="button">Dishes</a>#}
+{#	<a href="{% url 'sides' %}" class="btn btn-primary" role="button">Sides</a>#}
+{#	<a href="{% url 'menu' %}" class="btn btn-primary" role="button">Menu</a>#}
+
+
+<form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ formset.as_p }}
+    <button class="btn btn-default" type="submit">zapisz</button>
+</form>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workers in Location</title>
+</head>
+<p>
+<p><a href="{% url 'hr_working_hours:main' %}" type="button" class="btn btn-outline-primary">
+    <span class="glyphicon glyphicon-th-list"></span> Back to main menu</a>
+</p>
+<br>
+{% for n in my_locations %}
+    <p>
+        <a href="{% url 'hr_working_hours:my_workers_in_loc' location=n.location__id %}"
+           type="button" class="btn btn-info">
+            {{ n.location__location }} {{ n.location__detailed_location }}
+        </a>
+    </p>
+{% endfor %}
+</body>
+</html>
+{% endblock %}

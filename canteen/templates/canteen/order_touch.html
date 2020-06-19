@@ -1,0 +1,153 @@
+{% load static %}
+{% block content %}
+
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+
+<script defer src="/static/icons/all.js"></script>
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- dynamic-formset -->
+<script src="/static/js/dynamic-formset-touch.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.bootstrap-touchspin.min.css">
+<script src="/static/js/jquery.bootstrap-touchspin.js"></script>
+<script src="/static/js/calculations.js" async></script>
+
+
+<script>
+    $(document).ready(function(){
+    var list;
+    list = document.querySelectorAll("select[name*='-product'], label[for*='-product'], input[name*='-quantity']");
+    for (var i = 0; i < list.length; ++i) {
+        list[i].classList.add('form-control', 'input-lg');
+    }
+    var user;
+    user = document.querySelectorAll("input[name*='user'], label[for*='user'], input[name*='complete'], label[for*='user'], input[name*='complete'], input[name*='date']");
+    for (var x = 0; x < user.length; ++x) {
+        user[x].setAttribute('hidden', true);
+    }
+
+    $('#id_date').attr('readonly', true);
+    });
+</script>
+
+<body>
+
+<div class="container-fluid">
+<h5>Create order for {{ date  }}</h5>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    <input id="id_user" name="user" value="{{ ordering_user }}">
+    {{ form.date}}<br>
+    {{ form.complete }}
+    <table class="table" id="id_orders_table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formset.forms %}
+            <tr id="{{ form.prefix }}-row">
+                <td class="col-xs-8 col-sm-6">
+                    {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                {{ form.product }}
+                </td>
+                <td class="col-xs-4 col-sm-2">
+                    <input id="{{ form.prefix }}-quantity" name="{{ form.prefix }}-quantity" type="text" value="{{ form.quantity.value }} required">
+                </td>
+                <td class="col-xs-2 col-sm-1"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {{ formset.management_form }}
+    <div id="consentBox">
+        <div id="consentText">{{ consentText }}</div>
+        <div>{{ consentForm.as_p }}</div>
+    </div>
+<div id="buttonPlaceholder">
+        <input class="btn btn-primary action-button" type="submit" id="save_button" value="Order"/>
+</div>
+</form>
+
+<div class="row">
+<div class="input-group mb-3 col-lg-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">total cost:</span>
+      </div>
+      <div type="text" id="result" aria-describedby="basic-addon1" class="form-control"></div>
+</div>
+<div class="input-group mb-3 col-lg-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">your cost:</span>
+      </div>
+      <div type="text" id="your_price" aria-describedby="basic-addon1" class="form-control"></div>
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript">
+    $(function() {
+        $('#id_orders_table').find('tbody tr').formset({
+            prefix: 'orderitems_set'
+        })
+    })
+</script>
+<script>
+$('form').submit(function () {
+    $(this).find(':submit').attr('disabled', 'disabled');
+    document.getElementById("save_button").value="saving...";
+});
+</script>
+<script>
+    $(function() {
+        $( "input[name*='-quantity']" ).TouchSpin({
+            min: 1,
+            max: 10,
+            step: 1,
+            decimals:0
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $("select").attr('required', true);
+    });
+    function showButton() {
+        if ($("div[id='buttonPlaceholder']").is(':hidden')) {
+            document.getElementById("buttonPlaceholder").removeAttribute("hidden")
+        }
+        else {
+            document.getElementById("buttonPlaceholder").setAttribute("hidden", "hidden")
+        }
+    }
+    $(document).ready(function () {
+        var answer = "{{ consentAnswer }}";
+        var tick = document.getElementById("id_answer");
+        document.getElementById("consentText").setAttribute("style", "font-size: 20px; display: block");
+        tick.parentElement.setAttribute("style", "font-size: 20px");
+        tick.setAttribute("style", "height: 40px; width: 40px");
+        tick.setAttribute("onClick", "showButton()");
+        if (answer.toString() === "True") {
+            tick.checked = 'checked';
+            document.getElementById("buttonPlaceholder").removeAttribute("hidden")
+        }
+        if (answer.toString() === "False") {
+            tick.checked = '';
+            document.getElementById("buttonPlaceholder").setAttribute("hidden", "hidden")
+        }
+    });
+    document.getElementById("id_answer").previousElementSibling.innerHTML = "potwierdzam"
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!-- jQuery -->
+<script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- datatables -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+<script type="text/javascript" src="/static/js/scripts.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tableOne').dataTable({
+
+                });
+			} );
+		</script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select2").selectize( {
+                    plugins: ['remove_button']
+                });
+            });
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                $(".select").selectize( {
+                });
+            });
+        </script>
+</head>
+<body>
+<br/>
+<p>
+    <a href="{% url 'hr_working_hours:main' %}" type="button" class="btn btn-outline-primary">
+    <i class="fas fa-list"></i> back</a>
+</p>
+{% regroup all by manager_id as by_manager %}
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tableOne">
+	<thead>
+		<tr>
+			<th>locations</th>
+            <th>manager</th>
+            <th>delete</th>
+        </tr>
+	</thead>
+	<tbody>
+    {% for n in all %}
+		<tr>
+            <td>{% for x in n.location.all %} ( {{ x.location }} {{ x.detailed_location }} ) {% endfor %}
+                <a href="{% url 'hr_working_hours:loc_to_man_edit' n.id %}">
+                    <i class="fa fa-edit"></i>
+                </a>
+            </td>
+        	<td>{{ n.manager }}</td>
+            <td>
+                <a href="{% url 'hr_working_hours:loc_to_man_delete' n.id %}">
+                    <i class="fa fa-trash-alt"></i>
+                </a>
+            </td>
+		</tr>
+    {% endfor %}
+</table>
+
+<div class="col-md-4 column">
+<form method="post">
+    {% csrf_token %}
+    <p><label for="id_manager">manager:</label>
+    <select class="select" id="id_manager" name="manager">
+        <option value>manager</option>
+        {% for n in users %}
+            <option value="{{ n.id }}">{{ n.username }}</option>
+        {% endfor %}
+    </select></p>
+    <p><label for="id_location">location:</label>
+    <select class="select2" id="id_location" name="location" multiple="multiple">
+            {% for n in locations %}
+                <option value="{{ n.id }}">{{ n.location }} {{ n.detailed_location }}</option>
+            {% endfor %}
+    </select></p>
+
+    <p><input class="btn btn-primary" type="submit" value="Save"></p>
+</form>
+</div>
+
+</body>
+</html>
+{% endblock %}

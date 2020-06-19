@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/datables/datatables.js"></script>
+    <meta charset="UTF-8">
+    <script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#dishes_table').dataTable();
+				$('body').on('click', '[data-toggle="modal"]', function(){
+                        $($(this).data("target")+' .modal-dialog').load($(this).data("remote"));
+                    });
+			var list;
+            list = document.querySelectorAll('[id*="id"]');
+            for (var i = 0; i < list.length; ++i) {
+                list[i].classList.add('form-control');
+            }
+            } );
+		</script>
+    <title>Dishes List</title>
+
+</head>
+<body>
+<br/>
+<div class="table-responsive">
+<table  class="table table-striped table-bordered" id="dishes_table">
+	<thead>
+		<tr>
+			<th>dish</th>
+            <th>price</th>
+            <th>edit/delete</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for n in dishes %}
+		<tr>
+			<td>{{ n.name }}</td>
+        	<td>{{ n.price }}</td>
+            <td>
+                <a type="button" data-toggle="modal" data-remote="{%  url 'canteen:dishes_edit' n.id %}" data-target="#editModal">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                <a type="button" data-toggle="modal" data-remote="{%  url 'canteen:dishes_delete' n.id %}" data-target="#deleteModal">
+                        <i class="fa fa-trash-alt"></i>
+                    </a>
+            </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+<form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-4 column">
+    {{ prod_form.as_p }}
+        <button class="btn btn-primary" type="submit">zapisz</button>
+    </div>
+</form>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

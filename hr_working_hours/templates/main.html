@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br/>
+    {% if perms.hr_working_hours.can_draw_report %}
+            <p>
+                <a href="{% url 'hr_working_hours:LocToMan' %}" type="button" class="btn btn-primary">managers and locations</a>
+            </p>
+            <p>
+                <a href="{% url 'hr_working_hours:worker_to_loc_edit' %}" type="button" class="btn btn-primary">workers and locations</a>
+            </p>
+        {% endif %}
+    {% if perms.hr_working_hours.view_workers_to_location %}
+            <p>
+                <a href="{% url 'hr_working_hours:WorkerToLoc' %}" type="button" class="btn btn-primary">workers and working hours</a>
+            </p>
+    {% endif %}
+    {% if perms.hr_working_hours.can_draw_report %}
+            <p>
+                <a href="{% url 'hr_working_hours:hr_reports' %}" type="button" class="btn btn-primary">HR Reports</a>
+            </p>
+    {% endif %}
+</body>
+</html>
+{% endblock %}

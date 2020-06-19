@@ -1,0 +1,69 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+    {% load hr_tables %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User 1/3</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+<body>
+
+<form action="{% url 'core:NewUserS1' %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+    <div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                    <h4>New user 1/3</h4>
+                </div>
+        <div class="modal-body" onchange="validateForm()">
+            {{ form.as_p }}
+        </div>
+      <div class="modal-footer">
+            <p>
+                {% if form.shortsign %}
+                <button id="submit_btn" class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save and proceed</button>
+                {% endif %}
+                <a href="{{ previous_page }}" type="button" class="btn btn-secondary">
+                    <i class="fas fa-window-close"></i> cancel</a>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+
+            </p>
+                </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+        $(document).ready(function() {
+                $("#id_manager, #id_company").selectize( {
+                });
+                var list = document.querySelectorAll("input[name='shortsign'], input[name='pers_number']");
+                for (var i=0; i < list.length; i++) {
+                    list[i].classList.add('form-control')
+                }
+            });
+        var submitBtn = document.getElementById("submit_btn");
+        var managerField = document.getElementById("id_manager");
+        var companyField = document.getElementById("id_company");
+        submitBtn.disabled=true;
+        function validateForm() {
+            submitBtn.disabled=true;
+            var shortsign_field = document.getElementById("id_shortsign");
+            if (shortsign_field.value.length!==0 & managerField.value.length!==0 & companyField.value.length!==0) {
+                submitBtn.removeAttribute("disabled")
+            }
+                }
+</script>
+</body>
+</html>
+{% endblock %}

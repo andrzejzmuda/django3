@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+		<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
+		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#tabela').dataTable();
+
+			} );
+		</script>
+</head>
+<body>
+<div>
+<p>
+    {% if perms.instructions.add_instructions %}
+        <p><a href="{% url 'instructions:add' %}" type="button" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+             Add New</a></p>
+    {% endif %}
+</p>
+</div>
+
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tabela">
+	<thead>
+		<tr>
+			<th>Sachnr</th>
+            <th>attachments</th>
+            {% if perms.instructions.delete_instructions %}
+            <th>delete</th>
+            {% endif %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for n in sachnummery %}
+		<tr>
+			<td>{{ n.sachnr }}
+                <a href={% url 'instructions:edit' pk=n.id %}><i class="fa fa-edit"></i></a>
+            </td>
+        	<td class="btn-lg" align="left">
+                <ul style="list-style-type:none">
+                {% if n.kk_docs %}<li>documentation: <a target="_blank" href="/site_media/{{ n.kk_docs }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.malta %}<li>malta: <a target="_blank" href="/site_media/{{ n.malta }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.packing %}<li>packing: <a target="_blank" href="/site_media/{{ n.packing }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.soldering %}<li>soldering: <a target="_blank" href="/site_media/{{ n.soldering }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.heating %}<li>heating: <a target="_blank" href="/site_media/{{ n.heating }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.drawing %}<li>drawing: <a target="_blank" href="/site_media/{{ n.drawing }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.sab_control %}<li>SAB Control: <a target="_blank" href="/site_media/{{ n.sab_control }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                {% if n.sab_soldering %}<li>SAB Soldering: <a target="_blank" href="/site_media/{{ n.sab_soldering }}">
+                    <i class="fas fa-image"></i></a></li>{% endif %}
+                </ul>
+            </td>
+            {% if perms.instructions.delete_sachnr_cu_kk %}
+            <td class="btn-lg" align="center">
+                <a href="{% url 'instructions:delete' pk=n.id %}">
+                <i class="fa fa-trash-alt"></i></a>
+            </td>
+            {% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+</body>
+</html>
+{% endblock %}

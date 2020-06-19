@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+    <title>edit entry</title>
+
+<!-- datatables -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+<script type="text/javascript" src="/static/js/scripts.js"></script>
+
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+</head>
+<script>
+    $(document).ready(function() {
+            var list;
+            list = document.querySelectorAll("select[name='form-0-location']");
+            for (var i = 0; i < list.length; ++i) {
+                list[i].classList.add('select2');
+            }
+        document.getElementById("id_form-0-location").previousElementSibling.innerHTML = "location:";
+        });
+        $(document).ready(function() {
+                $(".select2").selectize({
+                plugins: ['remove_button']
+
+                });
+            });
+
+    </script>
+<body>
+
+<div class="col-md-4 column">
+    manager:
+    <p>{{ edit.manager }}</p>
+    <form method="post" class="edit">
+        {% csrf_token %}
+        {{ form.as_p }}
+       <button class='btn btn-primary' type="submit">save</button>
+       <a class='btn btn-secondary' href="{% url 'hr_working_hours:LocToMan' %}">back</a>
+    </form>
+</div>
+</body>
+</html>
+{% endblock %}

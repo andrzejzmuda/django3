@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>change company name</title>
+</head>
+<body>
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+<script>
+        $(document).ready(function() {
+            $(".discount").selectize({});
+        })
+</script>
+<form method="post" enctype="multipart/form-data">
+    <div class="col-md-4 column">
+    {% csrf_token %}
+    <p> <label for="id_name">company name:</label>
+            <input id="id_name" maxlength="250" name="name" type="text" class="form-control" value="{{ edit.name }}">
+        </p>
+        <p> <label for="id_discount">discount:</label>
+            <select class="discount" id="id_discount" name="discount">
+                    <option selected="selected" value={{ edit.discount }}>{{ edit.discount }}</option>
+                        <option value="100%">100%</option>
+                        <option value="60%">60%</option>
+                        <option value="50%">50%</option>
+                </select>
+        </p>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a href="{% url 'canteen:companies' %}" type="button" class="btn btn-secondary">Cancel</a>
+        <a href="{% url 'canteen:company_delete' edit.id %}" type="button" class="btn btn-danger">Delete</a>
+    </div>
+</form>
+</body>
+</html>
+{% endblock %}

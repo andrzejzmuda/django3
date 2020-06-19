@@ -1,0 +1,74 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User 3/3</title>
+</head>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+<body>
+
+<form action="{% url 'core:NewUserS3' shortsign=shortsign %}" method="post" enctype="multipart/form-data" class="upload">
+    {% csrf_token %}
+    <div class="modal-dialog">
+    <div class="modal-content">
+                <div class="modal-header">
+                    <h4>New user 3/3</h4>
+                    <h5>{{ kzz }}</h5>
+                </div>
+        <div class="modal-body">
+            <label for="id_worker">contract valid for:</label>
+            {{ form.as_p }}
+        </div>
+      <div class="modal-footer">
+            <p>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> save and proceed</button>
+
+                <button class="btn btn-warning" type="reset">
+                    <i class="fas fa-redo"></i> reset</button>
+
+            </p>
+                </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+        $(document).ready(function() {
+                var list = document.querySelectorAll("select[name='worker']," +
+                    " input[name=first_day], input[name=last_day]");
+                for (var i=0; i < list.length; i++) {
+                    list[i].classList.add('form-control')
+                }
+                document.getElementById("id_first_day").previousElementSibling.innerHTML = 'first day at work:';
+                document.getElementById("id_last_day").previousElementSibling.innerHTML = 'last day at work:';
+                $('#id_first_day, #id_last_day').datetimepicker({
+                    format: 'd.m.Y',
+                    lang: 'pl',
+                    timepicker: false,
+                    weeks: true,
+                    dayOfWeekStart: 1
+                });
+                $("form").bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+            });
+</script>
+</body>
+</html>
+{% endblock %}

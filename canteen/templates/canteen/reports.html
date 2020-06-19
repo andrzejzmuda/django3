@@ -1,0 +1,406 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>raporty</title>
+</head>
+<body>
+
+<!-- selectize CSS -->
+<link rel="stylesheet" href="/static/css/selectize.css"/>
+<!--selectize JS -->
+<script type="text/javascript" src="/static/js/selectize.js"></script>
+
+<!-- datetimepicker CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css">
+<!-- datetimepicker JS -->
+<script src="/static/js/jquery.datetimepicker.js"></script>
+<br/>
+<form method="post">
+    {% csrf_token %}
+<p>
+    <a type="button" class="btn btn-outline-primary" href="{% url 'canteen:users_admin' %}">
+    <i class="fas fa-list"></i> canteen's back</a>
+
+</p>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#report_from_to">
+    <i class="fas fa-book"></i>
+    total cost report per company
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#report_per_person">
+    <i class="fas fa-book"></i>
+    total cost report per person
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orders_for_the_day">
+    <i class="fas fa-book"></i>
+    orders per day list
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancel_orders">
+    <i class="fas fa-book"></i>
+    cancel orders for a client
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incomplete_orders">
+    <i class="fas fa-book"></i>
+    incomplete orders
+</button>
+
+
+<div onmouseover="incomplete_orders()">
+<div id="incomplete_orders" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">incomplete orders for the period:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                </button>
+          </div>
+          <div class="modal-body">
+            <div style="column-count: 1">
+                <p>
+                    from: <input id="id_from_date" class="form-control" name="from_date" type="text">
+                    do: <input id="id_to_date" class="form-control" name="to_date" type="text">
+                </p>
+            </div>
+          </div>
+              <div class="modal-footer">
+                <a id="incomplete_orders_link" type="button" class="btn btn-info">
+                    <i class="fas fa-search"></i>
+                    search
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+function incomplete_orders() {
+    $('#id_from_date, #id_to_date').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var url = '{% url 'canteen:incomplete_orders' '11-11-1111' '22-22-2222' %}';
+    var from_date = document.getElementById("id_from_date").value;
+    var to_date = document.getElementById("id_to_date").value;
+    url = url.replace(/11-11-1111/, from_date);
+    url = url.replace(/22-22-2222/, to_date);
+    document.getElementById("incomplete_orders_link").setAttribute("href", url);
+}
+    window.onload = incomplete_orders();
+</script>
+</div>
+
+<div onmouseover="cancel_orders()">
+<div id="cancel_orders" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">cancel orders for a client:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            <p>
+                from: <input id="id_cancel_from" class="form-control" name="cancel_from" type="text">
+                to: <input id="id_cancel_to" class="form-control" name="cancel_to" type="text">
+            </p>
+                KZZ: <select id="user" style="width: 400px"></select>
+            <div class="modal-footer">
+                <a id="cancel_orders_link" type="button" class="btn btn-info">
+                    <i class="fas fa-search"></i>
+                    search
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function cancel_orders() {
+    $('#id_cancel_from, #id_cancel_to').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var user = $('#user').selectize({
+            valueField: 'id',
+            labelField: 'username',
+            searchField: 'username',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'core:users_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, id_cancel_from, id_cancel_to) {
+                var user = value;
+                var from = document.getElementById("id_cancel_from").value;
+                var to = document.getElementById("id_cancel_to").value;
+                var url = '{% url 'canteen:show_cancel_orders' '44-44-4444' '55-55-5555' '33' %}';
+                url = url.replace(/33/, user);
+                url = url.replace(/44-44-4444/, from);
+                url = url.replace(/55-55-5555/, to);
+                document.getElementById("cancel_orders_link").setAttribute("href", url);
+
+            }
+        });
+      }
+    window.onload = cancel_orders();
+</script>
+</div>
+
+
+<div onmouseover="orders_for_the_day()">
+<div id="orders_for_the_day" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">generuj raport zamówień na dzień:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            <p>
+                date:
+                <input id="id_day" class="form-control" name="day" type="text">
+            </p>
+            <a id="orders_for_the_day_link" type="button" class="btn btn-info">
+                <i class="fas fa-search"></i>
+                szukaj
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function orders_for_the_day() {
+    $('#id_day').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var url = '{% url 'canteen:orders_for_the_day' '11-11-1111' %}';
+    var day = document.getElementById("id_day").value;
+    url = url.replace(/11-11-1111/, day);
+    document.getElementById("orders_for_the_day_link").setAttribute("href", url);
+}
+    window.onload = orders_for_the_day();
+</script>
+</div>
+
+<div onmouseover="perCompany()">
+<div id="report_from_to" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">create report for the period of:</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            <p>
+                from:
+                <input id="id_report_from" class="form-control" name="report_from" type="text">
+                to:
+                <input id="id_report_to" class="form-control" name="report_to" type="text">
+            </p>
+                company:
+                <select id="company" style="width: 400px"></select>
+        </div>
+          <div class="modal-footer">
+            <a id="link" type="button" class="btn btn-info">
+                <i class="fas fa-search"></i>
+                search
+            </a>
+          </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+function perCompany() {
+    $('#id_report_from, #id_report_to').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+    var company = $('#company').selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'canteen:company_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, id_report_from, id_report_to) {
+                var company = value;
+                var from = document.getElementById("id_report_from").value;
+                var to = document.getElementById("id_report_to").value;
+                var url = '{% url 'canteen:report_per_company' '33-33-3333' '44-44-4444' '55' %}';
+                url = url.replace(/55/, company);
+                url = url.replace(/33-33-3333/, from);
+                url = url.replace(/44-44-4444/, to);
+                document.getElementById("link").setAttribute("href", url);
+
+            }
+        });
+      }
+    window.onload = perCompany();
+</script>
+</div>
+
+<div onmouseover="per_person()">
+<div id="report_per_person" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">report per person:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="column-count: 1">
+            from:
+            <input class="form-control" id="per_person_from_date" name="per_person_from_date" type="text">
+            to:
+            <input class="form-control" id="per_person_to_date" name="per_person_to_date" type="text">
+            company: <select id="person_company" style="width: 400px"></select>
+        </div>
+          <div class="modal-footer">
+            <a id="per_person_link" type="button" class="btn btn-info">
+                <i class="fas fa-search"></i>
+                search
+            </a>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+ <script>
+    function per_person() {
+    $('#per_person_from_date, #per_person_to_date').datetimepicker({
+        format: 'd-m-Y',
+        lang: 'pl',
+        pickTime: false,
+        timepicker: false,
+        weeks: true,
+        dayOfWeekStart: 1,
+        closeOnDateSelect: true
+    });
+var person_company = $('#person_company').selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'canteen:company_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value, per_person_from_date, per_person_to_date) {
+                var person_company = value;
+                var from = document.getElementById("per_person_from_date").value;
+                var to = document.getElementById("per_person_to_date").value;
+                var url = '{% url 'canteen:report_per_person' '11-11-1111' '22-22-2222' '44' %}';
+                url = url.replace(/44/, person_company);
+                url = url.replace(/11-11-1111/, from);
+                url = url.replace(/22-22-2222/, to);
+                document.getElementById("per_person_link").setAttribute("href", url);
+
+            }
+        });
+    }
+     window.onload = per_person();
+</script>
+</form>
+</body>
+</html>
+{% endblock %}

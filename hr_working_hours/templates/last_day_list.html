@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script>
+
+<!-- datatables -->
+<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<script type="text/javascript" src="/static/datables/datatables.js"></script>
+<script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#tabela').dataTable();
+            $('body').on('click', '[data-toggle="modal"]', function(){
+                        $($(this).data("target")+' .modal-dialog').load($(this).data("remote"));
+                    });
+        } );
+    </script>
+    <title>HR Working Hours</title>
+</head>
+<body>
+<p>
+<p>
+    <a href="{% url 'hr_working_hours:hr_reports' %}" type="button" class="btn btn-outline-primary">
+    <i class="fas fa-list"></i> back</a>
+</p>
+
+<a data-remote="{% url 'hr_working_hours:last_day_create' %}?next={{ request.path|urlencode }}"
+               data-toggle="modal" data-target="#createModal" type="button" class="btn btn-primary">
+                    <i class="fa fa-edit"></i> new contract period</a>
+</p>
+
+<div class="table-responsive-sm">
+            <table class="table" id="tabela">
+                <thead>
+                <tr>
+                       <th>shortsign</th>
+                       <th>first</th>
+                       <th>last day at work</th>
+                       <th>edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for n in all %}
+                <tr>
+                    <td>{{ n.worker }}</td>
+                    <td>{{ n.first_day|default_if_none:'' }}</td>
+                    <td>{{ n.last_day|default_if_none:'' }}</td>
+                    <td>
+                        <a data-remote="{% url 'hr_working_hours:last_day_edit' n.id %}?next={{ request.path|urlencode }}"
+                           data-toggle="modal" data-target="#editModal">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

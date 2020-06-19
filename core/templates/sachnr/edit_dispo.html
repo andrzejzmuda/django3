@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit</title>
+</head>
+<body>
+<div class="col-md-4 column">
+    <form method='post' class="edit">
+
+{% csrf_token %}
+
+<p><label for="id_name">Dispo:</label>
+    <input class="form-control" id="id_name" name="name" type="text" value="{{ dispo_edit.name }}"></p>
+<p><label for="id_ekg">ekg:</label>
+    <input class="form-control" id="id_ekg" name="ekg" type="text" value="{{ dispo_edit.ekg }}"></p>
+
+    <button class="btn btn-primary" type="submit">save</button>
+    <a href="{% url 'core:dispo_all' %}" type="button" class="btn btn-secondary">cancel</a>
+    <a href="{% url 'core:dispo_delete' dispo_edit.id %}" type="button" class="btn btn-danger">delete</a>
+</form>
+</div>
+</body>
+</html>
+{% endblock %}

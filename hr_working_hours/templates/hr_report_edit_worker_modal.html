@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Reports</title>
+</head>
+<body>
+<form action="{% url 'hr_working_hours:hr_report_edit_worker_modal' %}" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">edit worker:</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+            worker:
+            <select id="edit_worker" style="width: 400px"></select>
+      </div>
+        <div class="modal-footer">
+            <a id="link_edit_worker" type="button" class="btn btn-info" disabled="">
+                <i class="fas fa-search"></i> search
+            </a>
+      </div>
+    </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+        var worker = $('#edit_worker').selectize({
+            valueField: 'id',
+            labelField: 'username',
+            searchField: 'username',
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'core:users_temp_serialize' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value) {
+                var worker = value;
+                var url = "{% url 'canteen:user_companies_edit' '0000' %}";
+                url = url.replace(/0000/, worker);
+                document.getElementById("link_edit_worker").setAttribute("href", url);
+                if (worker !== '0000') {
+                    document.getElementById("link_edit_worker").removeAttribute("disabled")
+                }
+            }
+        });
+      })
+    </script>
+</form>
+</body>
+</html>
