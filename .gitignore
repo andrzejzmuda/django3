@@ -20,7 +20,7 @@
 .python-version
 
 /hr_working_hours/migrations/
-!/hr_working_hours/reports/*
+/hr_working_hours/reports/*
 /instructions/migrations/
 /dashboard/migrations/
 /core/migrations/
