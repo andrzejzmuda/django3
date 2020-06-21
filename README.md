@@ -22,3 +22,7 @@ enable workers to place an order for a meal for a selected day, using several te
  The order is then added to the database. Each day after 9.30 AM the reports with the orders for the particular day is 
  automatically sent to the caterer. The application allows to create an array of different reports useful for HR dept and
    accountancy dept.
+   
+
+## instructions
+The app give an idea of a CRUD app, using file upload and signals that work with folders. 
