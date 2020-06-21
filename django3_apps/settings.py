@@ -82,15 +82,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '',
-        'USER': '',
+        'USER': 'admin',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '',
     },
     'time_registry': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '',
+        'NAME': 'timeregistry',
+        'USER': 'admin',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': ''
