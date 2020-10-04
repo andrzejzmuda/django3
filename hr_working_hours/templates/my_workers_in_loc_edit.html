@@ -75,18 +75,18 @@
                     <button type="button" class="btn btn-outline-primary dropdown-toggle btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="sr-only"></span>
                     </button>
-                    <div class="dropdown-menu">
-                <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=minus_four_start_week|date:"d-m-Y" week_end=minus_four_end_week|date:"d-m-Y" %}">
-                        W {{ minus_four_end_week|date:"W" }}: {{ minus_four_start_week|date:"j F o" }} - {{ minus_four_end_week|date:"j F o" }}</a>
-                <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=minus_three_start_week|date:"d-m-Y" week_end=minus_three_end_week|date:"d-m-Y" %}">
-                    W {{ minus_three_end_week|date:"W" }}: {{ minus_three_start_week|date:"j F o" }} - {{ minus_three_end_week|date:"j F o" }}</a>
+                <div class="dropdown-menu">
                 <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=minus_two_start_week|date:"d-m-Y" week_end=minus_two_end_week|date:"d-m-Y" %}">
                     W {{ minus_two_end_week|date:"W" }}: {{ minus_two_start_week|date:"j F o" }} - {{ minus_two_end_week|date:"j F o" }}</a>
                 <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=minus_one_start_week|date:"d-m-Y" week_end=minus_one_end_week|date:"d-m-Y" %}">
                     W {{ minus_one_end_week|date:"W" }}: {{ minus_one_start_week|date:"j F o" }} - {{ minus_one_end_week|date:"j F o" }}</a>
                 <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=current_start_week|date:"d-m-Y" week_end=current_end_week|date:"d-m-Y" %}">
                     W {{ current_end_week|date:"W" }}: {{ current_start_week|date:"j F o" }} - {{ current_end_week|date:"j F o" }}</a>
-                  </div>
+                <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=plus_one_start_week|date:"d-m-Y" week_end=plus_one_end_week|date:"d-m-Y" %}">
+                    W {{ plus_one_end_week|date:"W" }}: {{ plus_one_start_week|date:"j F o" }} - {{ plus_one_end_week|date:"j F o" }}</a>
+                <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=location worker=worker week_start=plus_two_start_week|date:"d-m-Y" week_end=plus_two_end_week|date:"d-m-Y" %}">
+                    W {{ plus_two_end_week|date:"W" }}: {{ plus_two_start_week|date:"j F o" }} - {{ plus_two_end_week|date:"j F o" }}</a>
+                </div>
                 </div>|
     worker: <div class="btn-group">
                 <button type="button" class="btn btn-primary">

@@ -17,7 +17,7 @@ class Dispo(models.Model):
         app_label = 'core'
 
     def __str__(self):
-        return '%s %s' % (self.name, self.ekg)
+        return self.name, self.ekg
 
 
 class Disponent(models.Model):
@@ -47,7 +47,7 @@ class Sachnr(models.Model):
         app_label = 'core'
 
     def __str__(self):
-        return '%s %s %s' % (self.sachnr, self.description, self.dispo)
+        return self.sachnr, self.description, (self.dispo.name, self.dispo.ekg)
 
 
 class Deliverer(models.Model):
@@ -62,7 +62,7 @@ class Deliverer(models.Model):
         app_label = 'core'
 
     def __str__(self):
-        return '%s %s' % (self.number, self.name)
+        return self.number, self.name
 
 
 class Supplier(models.Model):

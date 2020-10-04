@@ -1,10 +1,11 @@
-{% load staticfiles %}
+{% extends 'base/base.html' %}
+{% load static %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>edit entry</title>
 </head>
 <!-- jQuery -->
 <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
@@ -43,7 +44,7 @@
             <option value="{{ n.id }}" selected="selected">{{ n.username }}</option>
         {% endfor %}
             {% for n in workers_diff %}
-            <option value={{ n.id }}>{{ n.username }}</option>
+            <option value="{{ n.id }}">{{ n.username }}</option>
             {% endfor %}
         </select>
     </p>
@@ -54,13 +55,13 @@
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-save"></i> save</button>
 
-                <a href="{% url 'WorkerToLocEdit' %}" type="button" class="btn btn-secondary">
+                <a href="{% url 'hr_working_hours:worker_to_loc_edit' %}" type="button" class="btn btn-secondary">
                     <i class="fas fa-window-close"></i> cancel</a>
 
                 <button class="btn btn-warning" type="reset">
                     <i class="fas fa-redo"></i> reset</button>
 
-                <a href="{% url 'WorkerToLocEditSingleDelete' id=edit.id %}" type="button" class="btn btn-danger">
+                <a href="{% url 'hr_working_hours:worker_to_loc_edit_single_delete' edit.id %}" type="button" class="btn btn-danger">
                     <i class="fa fa-trash-alt"></i> delete</a>
 
             </p>
