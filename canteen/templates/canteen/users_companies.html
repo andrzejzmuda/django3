@@ -1,0 +1,184 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+    {% load hr_tables %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>clients</title>
+</head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+		<script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="/static/datables/datatables.js"></script>
+    <!-- selectize CSS -->
+    <link rel="stylesheet" href="/static/css/selectize.css"/>
+    <!--selectize JS -->
+    <script type="text/javascript" src="/static/js/selectize.js"></script>
+<body>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+                $(".users").selectize({});
+                $(".company").selectize({});
+            });
+     $(document).ready(function() {
+         $('#table').dataTable({})
+     });
+</script>
+<br/>
+<p>
+    <a href="{% url 'canteen:companies' %}" type="button" class="btn btn-primary">companies</a>
+    <a href="{% url 'core:pers_numbers' %}" type="button" class="btn btn-primary">personal numbers</a>
+    <a href="{% url 'core:NewUserS1' %}"
+       type="button" class="btn btn-primary">
+       <i class="fa fa-edit"></i>new user</a>
+</p>
+
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="table">
+	<thead>
+    <tr>
+            <th>user</th>
+            <th>active?</th>
+            <th>company</th>
+            <th>personal number</th>
+  		</tr>
+	</thead>
+	<tbody>
+		{% for n in users %}
+            <tr>
+            <td>{{ n.username }} <a href="{% url 'canteen:user_companies_edit' pk=n.id %}"><i class="fa fa-edit"></i></a></td>
+            <td>{{ n.is_active|yesno }}</td>
+            <td>{{ n.pk|company }}</td>
+            <td>{{ n.pk|pers_number }}</td>
+            </tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+
+<div style="width: 250px">
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">save1</button>
+</form>
+</div>
+
+<script>
+
+    </script>
+
+<script>
+    $(document).ready(function () {
+        var card_original = document.getElementById("id_card_original");
+        var temp_card_date = document.getElementById("id_temp_card_date");
+        card_original.value="{{ form.card.value }}";
+
+        var list;
+        list = document.querySelectorAll('[id*="id"]');
+        for (var i = 0; i < list.length; ++i) {
+            list[i].classList.add('form-control');
+        }
+        card_original.parentElement.style.display = "none";
+        temp_card_date.parentElement.style.display = "none";
+        $("ul.errorlist").hide();
+
+        $("form").bind("keypress", function(e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
+            $('#id_last_day').datetimepicker({
+                format: 'd.m.Y',
+                lang: 'pl',
+                formatTime: 'H:i',
+                timepicker:false,
+                weeks: true,
+                dayOfWeekStart: 1,
+        {#maxDate: ""#}
+            });
+        }
+    );
+</script>
+
+
+{% if duplicate != 0 %}
+    <script>
+        $(window).load(function()
+        {
+    $('#myModal').modal('show');
+        });
+    </script>
+<style>
+.modal-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+    }
+</style>
+
+<script src="/static/stolowka/js/bootstrap.min.js"></script>
+
+<div class="container">
+{#    <script src="/static/ih_planowanie/js/bootstrap.min.js"></script>#}
+  <!-- Trigger the modal with a button -->
+  <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <br>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        {% if duplicate != 0 %}
+            {% if duplicate_name %}
+          <p>
+            <b>user {{ duplicate_name }} already exists</b>
+          </p>
+                <br>
+            Would you like to edit the user?
+          <a href="{% url 'user_companies_edit' pk=duplicate_name.id %}" type="button"
+                   class="btn btn-info">yes</a>
+          <a type="button" class="btn btn-danger" data-dismiss="modal">no</a>
+
+                {% endif %}
+            {% if duplicate_pers_number %}
+          <p>
+            <b>number {{ duplicate_pers_number.pers_number }} is already assigned to {{ duplicate_pers_number.user }}</b>
+          </p>
+                {% endif %}
+            {% if duplicate_card_number %}
+          <p>
+            <b>this card has been already assigned {{ duplicate_card_number.user }}</b>
+          </p>
+                {% endif %}
+      {% endif %}
+    <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal">OK</a>
+    </div>
+
+</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endif %}
+{#<div id="createModal1" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog">#}
+{##}
+{#    </div>#}
+{#</div>#}
+{#<div id="createModal2" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog">#}
+{##}
+{#    </div>#}
+</body>
+</html>
+{% endblock %}

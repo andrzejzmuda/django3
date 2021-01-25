@@ -81,11 +81,6 @@ $(document).ready(function() {
                 timepicker:true,
                 weeks: true,
                 dayOfWeekStart: 1,
-    {% if last_day %}
-        maxDate: "{{ last_day|date:'Y/m/d' }}"
-    {% else %}
-        maxDate: ""
-    {% endif %}
             });
 })
 </script>

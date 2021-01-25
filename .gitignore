@@ -1,4 +1,5 @@
 *.pyc
+*.xml
 
 /site_media/
 /*/migrations/
@@ -33,3 +34,4 @@
 .idea/misc.xml
 .idea/modules.xml
 /django3_apps/settings.py
+env.sh

@@ -182,8 +182,8 @@ def worker_to_loc_edit_single(request, pk):
             locations_diff.append(all)
     for all in users:
         found = False
-        for sub in loc_to_worker.values('workers'):
-            if sub.values()[0] == all.id:
+        for sub in loc_to_worker.values('workers__id'):
+            if sub['workers__id'] == all.id:
                 found = True
                 break
         if not found:
@@ -191,7 +191,7 @@ def worker_to_loc_edit_single(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('hr_working_hours:WorkerToLocEdit'))
+            return HttpResponseRedirect(reverse('hr_working_hours:worker_to_loc_edit'))
     else:
         form = WorkersToLocationForm(instance=edit)
         form.fields['workers'].queryset = User.objects.filter(
@@ -209,7 +209,7 @@ def worker_to_loc_edit_single_delete(request, pk):
         form = WorkersToLocationForm(request.POST, instance=item)
         form.u.delete()
         form.save()
-    return HttpResponseRedirect(previous_page)
+    return HttpResponseRedirect(reverse('hr_working_hours:worker_to_loc_edit'))
 
 
 
@@ -296,14 +296,14 @@ def my_workers_in_loc_edit(request, worker, week_start, week_end, location):
     today = datetime.datetime.today()
     current_start_week = today - datetime.timedelta(today.weekday() + 1)
     current_end_week = current_start_week + datetime.timedelta(6)
-    minus_one_start_week = today + datetime.timedelta(days=-today.weekday(), weeks=-1, hours=-3)
+    plus_one_start_week = today + datetime.timedelta(days=-(today.weekday() + 1), weeks=+1, hours=-3)
+    plus_one_end_week = plus_one_start_week + datetime.timedelta(6)
+    plus_two_start_week = today + datetime.timedelta(days=-(today.weekday() + 1), weeks=+2, hours=-3)
+    plus_two_end_week = plus_two_start_week + datetime.timedelta(6)
+    minus_one_start_week = today + datetime.timedelta(days=-(today.weekday() + 1), weeks=-1, hours=-3)
     minus_one_end_week = minus_one_start_week + datetime.timedelta(6)
-    minus_two_start_week = today + datetime.timedelta(days=-today.weekday(), weeks=-2, hours=-3)
+    minus_two_start_week = today + datetime.timedelta(days=-(today.weekday() + 1), weeks=-2, hours=-3)
     minus_two_end_week = minus_two_start_week + datetime.timedelta(6)
-    minus_three_start_week = today + datetime.timedelta(days=-today.weekday(), weeks=-3, hours=-3)
-    minus_three_end_week = minus_three_start_week + datetime.timedelta(6)
-    minus_four_start_week = today + datetime.timedelta(days=-today.weekday(), weeks=-4, hours=-3)
-    minus_four_end_week = minus_four_start_week + datetime.timedelta(6)
     zone = timezone.now()
     workdays = []
     reports = []
@@ -343,8 +343,8 @@ def my_workers_in_loc_edit(request, worker, week_start, week_end, location):
                'current_start_week': current_start_week, 'current_end_week': current_end_week,
                'minus_one_start_week': minus_one_start_week, 'minus_one_end_week': minus_one_end_week,
                'minus_two_start_week': minus_two_start_week, 'minus_two_end_week': minus_two_end_week,
-               'minus_three_start_week': minus_three_start_week, 'minus_three_end_week': minus_three_end_week,
-               'minus_four_start_week': minus_four_start_week, 'minus_four_end_week': minus_four_end_week,
+               'plus_one_start_week': plus_one_start_week, 'plus_one_end_week': plus_one_end_week,
+               'plus_two_start_week': plus_two_start_week, 'plus_two_end_week': plus_two_end_week,
                'week_start': week_start, 'week_end': week_end, 'start': start, 'end': end,
                'previous_page': previous_page, 'location': location, 'days_off': days_off, 'worker': worker,
                'reports': reports, 'get_worker_id': get_worker_id,

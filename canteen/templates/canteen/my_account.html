@@ -46,7 +46,7 @@
                 <tbody>
                     {% for n in sum_up %}
                     <tr>
-                        <td>{{ n.date }}</td>
+                        <td>{{ n.date|date:"j N y" }}</td>
                         <td>{{ n.per_order }}</td>
                         <td>{{ n.user_cost|floatformat:2 }}</td>
                         <td>{{ n.company_cost|floatformat:2 }}</td>
