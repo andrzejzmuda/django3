@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django import template
+
 from core.models import get_sentinel_user
 
 register = template.Library()

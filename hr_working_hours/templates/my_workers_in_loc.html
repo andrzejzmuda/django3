@@ -61,7 +61,7 @@
         <td>
             <div class="dropdown">
                   <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    select week
+                    select month
                   </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <a class="dropdown-item" href="{% url 'hr_working_hours:my_workers_in_loc_edit' location=selected_location.id worker=item.workers__username week_start=minus_four_start_month|date:"d-m-Y" week_end=minus_four_end_month|date:"d-m-Y" %}">

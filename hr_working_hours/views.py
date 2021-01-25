@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.template import loader
 from django.shortcuts import reverse, get_object_or_404
-from hr_working_hours.models import WorkingHours, LocationToManager, WorkersToLocation, LastDay, ManagerToWorker,\
-    HolidayTypes
-from core.models import Location
-from .forms import WorkingHoursForm, LocationToManagerForm, WorkersToLocationForm, LastDayForm,\
-    ManagerToWorkersGroupForm, ManagerToWorkerForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User, Group
 from django.forms.models import modelformset_factory
-from canteen.models import UserCompanyCard, Company
-from django.db.models import Q, ExpressionWrapper, Sum, DurationField, F, TimeField, DecimalField
 import datetime
 from django.utils import timezone
-from calendar import monthrange
 import os
 import json
 import csv
@@ -28,6 +20,16 @@ from django.conf import settings
 import glob
 import time
 import pytz
+
+from hr_working_hours.models import WorkingHours, LocationToManager, WorkersToLocation, LastDay, ManagerToWorker,\
+    HolidayTypes
+from core.models import Location
+from .forms import WorkingHoursForm, LocationToManagerForm, WorkersToLocationForm, LastDayForm,\
+    ManagerToWorkersGroupForm, ManagerToWorkerForm
+from canteen.models import UserCompanyCard, Company
+from django.db.models import Q, ExpressionWrapper, Sum, DurationField, F, TimeField, DecimalField
+
+from calendar import monthrange
 
 
 local_tz = pytz.timezone('Europe/Warsaw')

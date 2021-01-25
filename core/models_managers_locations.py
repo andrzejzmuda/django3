@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from core.models import get_sentinel_user, Location
 
 

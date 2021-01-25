@@ -6,19 +6,21 @@ from django.urls import reverse
 from .forms_users_addons import PersonalForm, CreateUserFormStage1, CreateUserFormStage2, CreateUserFormStage3
 import json
 import os
-from django3_apps.settings import BASE_DIR
 from django import template
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.template import loader
+
+from PIL import Image, ImageDraw, ImageFont
+
+from django3_apps.settings import BASE_DIR
 from canteen.models import UserCompanyCard, Company
 from hr_working_hours.models import ManagerToWorker, LastDay
 from hr_working_hours.views import first_day_training
 from core.models_users_addons import Personal_number
-from PIL import Image, ImageDraw, ImageFont
+
 
 register = template.Library()
-
 
 @permission_required('canteen.add_usercompanycard')
 def NewUserS1(request):

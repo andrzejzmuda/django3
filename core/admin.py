@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from core.models import Sachnr, Dispo, Disponent, Deliverer, Supplier
 from core.models_managers_locations import Location, Responsibles
 from core.models_users_addons import Personal_number, Consent

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from canteen.models import Order, OrderItems, OrderConsents, Company, UserCompanyCard, Product, Menu
 
 admin.site.register(Order)

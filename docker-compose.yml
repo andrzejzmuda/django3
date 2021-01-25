@@ -7,6 +7,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - DB_HOST=abc
+      - DB_NAME=abc
+      - DB_USER=abc
+      - DB_PASS=abc
     depends_on:
       - postgres
     volumes:
@@ -22,4 +27,6 @@ services:
     ports:
       - "5433:5433"
     environment:
-      POSTGRES_PASSWORD: qwerty
+      - POSTGRES_DB=abc
+      - POSTGRES_USER=abc
+      - POSTGRES_PASSWORD=abc

@@ -3,6 +3,7 @@ from django.contrib.auth.admin import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from core.models_users_addons import Consent
 
 

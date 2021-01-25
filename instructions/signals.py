@@ -1,9 +1,12 @@
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
 import os
+
+import shutil
+
 from instructions.models import Instructions
 from django3_apps.settings import BASE_DIR
-import shutil
+
 
 
 @receiver(pre_save, sender=Instructions, dispatch_uid="pre_save_my_handler")

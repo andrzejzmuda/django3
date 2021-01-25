@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.template import loader
-from canteen.models import Menu, Order, Product, OrderItems, UserCompanyCard, Company, OrderConsents
 from django.contrib.auth.models import User, Group
 from django.utils.crypto import get_random_string
-from core.models_users_addons import Personal_number, Consent
-from canteen.forms import MenuForm, OrderForm, ProductForm, UserCompanyCardForm, CompanyForm, CreateUserForm, \
-    ConsentForm
 from django.shortcuts import get_object_or_404, reverse
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
@@ -19,6 +15,10 @@ import re
 from django.utils.http import urlquote
 from operator import itemgetter
 
+from canteen.models import Menu, Order, Product, OrderItems, UserCompanyCard, Company, OrderConsents
+from core.models_users_addons import Personal_number, Consent
+from canteen.forms import MenuForm, OrderForm, ProductForm, UserCompanyCardForm, CompanyForm, CreateUserForm, \
+    ConsentForm
 from hr_working_hours.models import LastDay, ManagerToWorker
 from hr_working_hours.forms import ManagerToWorkerForm
 

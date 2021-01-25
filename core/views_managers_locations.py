@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from core.forms_managers_locations import LocationForm, ResponsibleForm
-from core.models_managers_locations import Location, Responsibles
 from django.shortcuts import reverse
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
@@ -8,6 +6,9 @@ from django.contrib.auth.decorators import permission_required
 from django.shortcuts import HttpResponseRedirect
 from django.template import loader
 from django.http import HttpResponse
+
+from core.forms_managers_locations import LocationForm, ResponsibleForm
+from core.models_managers_locations import Location, Responsibles
 
 
 # MANAGER #

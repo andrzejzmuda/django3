@@ -1,10 +1,11 @@
 from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from instructions.models import Instructions
-from instructions.forms import InstructionsForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required, login_required
+
+from instructions.models import Instructions
+from instructions.forms import InstructionsForm
 
 
 @login_required()
