@@ -20,6 +20,6 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5433"
     environment:
       POSTGRES_PASSWORD: qwerty
