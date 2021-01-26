@@ -32,7 +32,7 @@
 </head>
 <body>
 <br/>
-{% if perms.stolowka.change_menu %}
+{% if perms.canteen.change_menu %}
 	<a href="{% url 'canteen:users_admin' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: left">canteen's back</a>
 {% endif %}
 	{% if url == 'menu_all' %}
@@ -45,7 +45,7 @@
 
     <a data-remote="{%  url 'canteen:my_account' %}" class="btn btn-info" type="button" style="vertical-align:top; float: left"
        data-toggle="modal" data-target="#my_accountModal">my expenses</a>
-{% if perms.stolowka.diner_front %}
+{% if perms.canteen.diner_front %}
     <a href="{% url 'canteen:diner_front' %}" class="btn btn-primary" role="button" style="vertical-align:top; float: right">Service</a>
 {% endif %}
 <br/>
@@ -62,7 +62,7 @@
 <tr>
     <td>{% if monday_menu %}{% for n in monday_menu %}
         <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
-            {% if perms.stolowka.delete_menu %}
+            {% if perms.canteen.delete_menu %}
             <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
                 <i class="fa fa-trash-alt"></i>
             </a>
@@ -72,7 +72,7 @@
 
     <td>{% if tuesday_menu %}{% for n in tuesday_menu %}
         <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
-            {% if perms.stolowka.delete_menu %}
+            {% if perms.canteen.delete_menu %}
             <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
                 <i class="fa fa-trash-alt"></i>
             </a>
@@ -82,7 +82,7 @@
 
     <td>{% if wednesday_menu %}{% for n in wednesday_menu %}
         <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
-            {% if perms.stolowka.delete_menu %}
+            {% if perms.canteen.delete_menu %}
             <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal">
                 <i class="fa fa-trash-alt"></i>
             </a>
@@ -92,7 +92,7 @@
 
     <td>{% if thursday_menu %}{% for n in thursday_menu %}
         <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
-            {% if perms.stolowka.delete_menu %}
+            {% if perms.canteen.delete_menu %}
             <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal"><i class="fa fa-trash-alt"></i></a>
             {% endif %}
         </p>
@@ -100,7 +100,7 @@
 
     <td>{% if friday_menu %}{% for n in friday_menu %}
         <p>{{ n.product.name }} {{ n.product.sides.all }} {{ n.product.price }}
-            {% if perms.stolowka.delete_menu %}
+            {% if perms.canteen.delete_menu %}
             <a data-remote="{% url 'canteen:menu_delete' n.id %}" type="button" data-toggle="modal" data-target="#menu_deleteModal"><i class="fa fa-trash-alt"></i></a>
             {% endif %}
         </p>
@@ -154,7 +154,7 @@
        text-align: center;
     }
 </style>
-{% if perms.stolowka.add_menu %}
+{% if perms.canteen.add_menu %}
 <form method="post">
     <div class="col-md-4 column">
             {% csrf_token %}

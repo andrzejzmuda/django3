@@ -11,22 +11,22 @@
 <br/>
 <p>
 <p>
-    {% if perms.stolowka.add_menu %}
+    {% if perms.canteen.add_menu %}
     <a href="{% url 'canteen:menu_all' %}" class="btn btn-outline-primary" role="button">Menu</a>
     {% endif %}
 </p>
 <p>
-    {% if perms.stolowka.add_company %}
+    {% if perms.canteen.add_company %}
     <a href="{% url 'canteen:companies' %}" class="btn btn-primary" role="button">companies</a>
     {% endif %}
 </p>
 <p>
-    {% if perms.stolowka.add_product %}
+    {% if perms.canteen.add_product %}
     <a href="{% url 'canteen:dishes_all' %}" class="btn btn-primary" role="button">dishes</a>
     {% endif %}
 </p>
 <p>
-    {% if perms.stolowka.draw_report %}
+    {% if perms.canteen.draw_report %}
     <a href="{% url 'canteen:canteen_reports' %}" class="btn btn-primary" role="button">reports</a>
     {% endif %}
 </p>

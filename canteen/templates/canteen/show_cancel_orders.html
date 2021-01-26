@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Anulacja zamówionych obiadów</title>
+    <title>Cancellation of placed orders</title>
 </head>
 <!-- datatables CSS -->
 <link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
@@ -31,9 +31,9 @@
 <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="report">
 	<thead>
 		<tr>
-            <th>date</th>
-            <th>client</th>
-            <th>personal number</th>
+      <th>date</th>
+      <th>client</th>
+      <th>personal number</th>
 			<th>deetails</th>
 			<th>quantity</th>
 			<th>unit price</th>
@@ -52,12 +52,12 @@
 		{% endfor %}
 	</tbody>
 </table>
-{% if perms.stolowka.draw_report and strfrom|date:"Y-m-d 09:00" > cancellation_time|date:"Y-m-d H:i" %}
+{% if perms.canteen.draw_report and strfrom|date:"Y-m-d 09:00" > cancellation_time|date:"Y-m-d H:i" %}
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_prompt">delete all</button>
     {% else %}
     <h5>It's after 9.30 - order cancellation for today is no longer possible</h5>
     {% endif %}
-        <a href="{% url 'canteen:stolowka_reports' %}" type="button" class="btn btn-secondary">back</a>
+        <a href="{% url 'canteen:canteen_reports' %}" type="button" class="btn btn-secondary">back</a>
 
 
 <!-- delete event -->
