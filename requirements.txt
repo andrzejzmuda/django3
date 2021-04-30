@@ -45,7 +45,7 @@ texttable==0.8.4
 traitlets==5.0.0
 typing==3.6.6
 tzlocal==2.0.0
-urllib3==1.25.3
+urllib3==1.25.8
 utils==0.8.0
 wcwidth==0.2.5
 wkhtmltopdf==0.2
