@@ -4,7 +4,7 @@ backcall==0.2.0
 certifi==2019.11.28
 chardet==3.0.4
 decorator==4.4.2
-Django==3.0.7
+Django==3.1.9
 django-debug-toolbar==2.1
 django-dev==0.2.1
 django-excel==0.0.10
