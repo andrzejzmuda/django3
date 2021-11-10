@@ -1,5 +1,6 @@
 *.pyc
 *.xml
+*.tar
 
 /site_media/
 /*/migrations/
@@ -33,5 +34,8 @@
 .idea/inspectionProfiles/
 .idea/misc.xml
 .idea/modules.xml
-/django3_apps/settings.py
+django3_apps/settings.py
+logfile
 env.sh
+docker-compose.yml
+.env

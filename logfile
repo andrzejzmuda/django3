@@ -23,3 +23,23 @@
 15:05:48,997 asyncio DEBUG Using selector: KqueueSelector
 15:06:57,894 asyncio DEBUG Using selector: KqueueSelector
 15:13:38,257 asyncio DEBUG Using selector: KqueueSelector
+13:31:22,130 asyncio DEBUG Using selector: KqueueSelector
+13:31:59,929 asyncio DEBUG Using selector: KqueueSelector
+13:32:23,943 asyncio DEBUG Using selector: KqueueSelector
+13:34:22,50 asyncio DEBUG Using selector: KqueueSelector
+13:34:25,656 canteen.tests INFO testing edit worker module None
+13:37:06,162 asyncio DEBUG Using selector: KqueueSelector
+13:37:09,446 canteen.tests INFO testing edit worker module 302
+13:37:50,600 asyncio DEBUG Using selector: KqueueSelector
+13:37:53,387 canteen.tests INFO testing edit worker module None
+13:38:28,867 asyncio DEBUG Using selector: KqueueSelector
+13:38:33,709 canteen.tests INFO testing edit worker module <HttpResponseRedirect status_code=302, "text/html; charset=utf-8", url="/accounts/login/?next=/canteen/user_companies_edit/0">
+13:38:44,322 asyncio DEBUG Using selector: KqueueSelector
+13:38:47,11 canteen.tests INFO testing edit worker module <HttpResponseRedirect status_code=302, "text/html; charset=utf-8", url="/accounts/login/?next=/canteen/user_companies_edit/0">
+13:38:51,788 asyncio DEBUG Using selector: KqueueSelector
+13:38:54,436 canteen.tests INFO testing edit worker module <HttpResponseRedirect status_code=302, "text/html; charset=utf-8", url="/accounts/login/?next=/canteen/user_companies_edit/0">
+13:39:31,719 asyncio DEBUG Using selector: KqueueSelector
+13:50:42,292 asyncio DEBUG Using selector: KqueueSelector
+13:52:45,806 asyncio DEBUG Using selector: KqueueSelector
+13:54:27,258 asyncio DEBUG Using selector: KqueueSelector
+13:55:03,825 asyncio DEBUG Using selector: KqueueSelector

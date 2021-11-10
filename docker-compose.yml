@@ -1,32 +1,21 @@
-version: '3'
-volumes:
-  local_postgres_data: {}
-
+version: "3.8"
 services:
-  django:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  db:
+    image: postgres:13
     environment:
-      - DB_HOST=abc
-      - DB_NAME=abc
-      - DB_USER=abc
-      - DB_PASS=abc
-    depends_on:
-      - postgres
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+
+  web:
+    build: .
+    command: bash -c "python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
-
-  postgres:
-    image: postgres:latest
-    volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5433"
-    environment:
-      - POSTGRES_DB=abc
-      - POSTGRES_USER=abc
-      - POSTGRES_PASSWORD=abc
+    depends_on:
+      - db
+    links:
+      - db:db

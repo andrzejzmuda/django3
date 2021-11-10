@@ -46,6 +46,9 @@
                 {% if perms.hr_working_hours %}
                     <a class="dropdown-item" href="{% url 'hr_working_hours:main' %}"><b>HR Working Hours</b></a>
                 {% endif %}
+                {% if perms.hardware %}
+                    <a class="dropdown-item" href="{% url 'hardware:search_devices' %}"><b>Hardware</b></a>
+                {% endif %}
                 </div>
               </li>
                 {% endif %}

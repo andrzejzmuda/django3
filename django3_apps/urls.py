@@ -24,10 +24,12 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', dashboard_views.dashboard, name='dashboard'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('instructions/', include('instructions.urls')),
     path('canteen/', include('canteen.urls')),
     path('hr_working_hours/', include('hr_working_hours.urls')),
+    path('hardware/', include('hardware.urls')),
     path('core/', include('core.urls')),
     path('dashboard/', include('dashboard.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

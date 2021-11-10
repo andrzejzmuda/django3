@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+		<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
+		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+		<script>
+        $(document).ready(function() {
+            $('body').on('click', '[data-toggle="modal"]', function () {
+                $($(this).data("target") + ' .modal-dialog').load($(this).data("remote"));
+            });
+        });
+    </script>
+</head>
+<body>
+{% if device %}
+<a data-remote="{% url 'hardware:assign_device_modal' device_id=device.id %}" class="btn btn-info" type="button" style="vertical-align:top; float: left"
+       data-toggle="modal" data-target="#assign_device_modal">assign this device</a>
+{% endif %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{form.as_p}}
+	{{formset.as_p}}
+	<button type="submit" class="btn btn-primary">Save</button>
+	{% if device %}
+	<a href="{% url 'hardware:delete_device' device.id %}" type="button" class="btn btn-danger">Delete</a>
+	{% endif %}
+	<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-dark">Cancel</a>
+</form>
+
+<div id="assign_device_modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

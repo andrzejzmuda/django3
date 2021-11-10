@@ -1,7 +1,11 @@
 from django.test import TestCase, Client
+from dotenv import load_dotenv, dotenv_values
 import random
 import logging
 from django.contrib.auth.models import User
+
+load_dotenv()
+config = dotenv_values(".env")
 
 
 logger = logging.getLogger(__name__)
@@ -14,12 +18,13 @@ logging.basicConfig(
     level=logging.DEBUG
     )
 
-# class EditWorkerTest(TestCase):
-    # def test_edit(self):
-    #     client = Client()
-    #     client.post('/accounts/login/', {'username': 'admin', 'password':''})
-    #     # response = client.get('/canteen/user_companies_edit/{}'.format(random.randrange(0,User.objects.all().count())))
-    #     response = client.get('/canteen/user_companies_edit/11')
-    #     result = self.assertEqual(response.status_code, 200)
-    #     logger.info(f"testing edit worker module {result}")
-    # def test_hr_reports(self):
+class EditWorkerTest(TestCase):
+    def test_edit(self):
+        ids = []
+        for n in User.objects.all().values('id'):
+            ids.append(n['id'])
+        client = Client()
+        client.login(username='admin',password=config['passwd'])
+        response = client.get('/canteen/user_companies_edit/{}'.format(random.randrange(ids)))
+        self.assertEqual(response.status_code, 302)
+        logger.info(f"testing edit worker module {response}")

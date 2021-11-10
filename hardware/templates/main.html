@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
+		<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
+		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#devices').dataTable();
+			} );
+		</script>
+		{% comment %} <!-- jQuery -->
+		<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script> {% endcomment %}
+		<!-- selectize CSS -->
+		<link rel="stylesheet" href="/static/css/selectize.css"/>
+		<!--selectize JS -->
+		<script type="text/javascript" src="/static/js/selectize.js"></script>
+</head>
+<body>
+{% comment %} <table cellpadding="0" cellspacing="0" border="0"
+	class="table table-striped table-bordered table-hovered" id="devices">
+	<thead>
+		<tr>
+			<th>hostname</th>
+			<th>user</th>
+			<th>category</th>
+			<th>status</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for n in devices %}
+		<tr>
+			<td><a href="{% url 'hardware:edit_device' pk=n.id %}">
+                    <span class="fa fa-edit"></span>
+                </a>{{n.hostname}}</td>
+			<td>{{n.history_set.last.owner|default_if_none:""}}</td>
+			<td>{{n.category}}</td>
+			<td>{{ n.history_set.last.event }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	</tbody>
+</table> {% endcomment %}
+
+{% comment %} <div>
+<h5>Select a device:</h5>
+    <select id="device" style="width: 400px"></select>
+</div>
+
+<script>
+    var $sachnr = $('#device').selectize({
+            valueField: 'id',
+            labelField: 'hostname',
+            searchField: ['hostname','description', 'category', 'serial_number',
+			 'history__owner__kzz__username', 'history__assigned',
+			 'history__decomissioned', 'history__event__action'],
+            options: [{}],
+            maxOptions: 5,
+            loadThrottle: 100,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'hardware:serialize_devices' %}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        name: query
+                        },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res);
+
+                    }
+            })
+            },
+            onChange: function(value) {
+                var id = value;
+                var url = '{% url 'hardware:list_devices' 0 %}';
+                url = url.replace(0, id);
+                document.getElementById("link").setAttribute("href", url);
+            }
+        });
+</script>
+
+<a id="link" type="button" class="btn btn-success">wyświetl szczegóły</a> {% endcomment %}
+</body>
+</html>
+{% endblock %}
