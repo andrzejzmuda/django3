@@ -10,9 +10,16 @@
 		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				$('#devices').dataTable();
+				$('#categories').dataTable();
 			} );
 		</script>
+		<script>
+        $(document).ready(function() {
+            $('body').on('click', '[data-toggle="modal"]', function () {
+                $($(this).data("target") + ' .modal-dialog').load($(this).data("remote"));
+            });
+        });
+    </script>
 		{% comment %} <!-- jQuery -->
 		<script type="text/javascript" charset="utf8" src="/static/js/jquery-3.4.1.min.js"></script> {% endcomment %}
 		<!-- selectize CSS -->
@@ -20,5 +27,36 @@
 		<!--selectize JS -->
 		<script type="text/javascript" src="/static/js/selectize.js"></script>
 </head>
+<body>
+<div style="margin: 9px">
+	<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-primary">Devices</a>
+	{% comment %} <a href="{% url 'hardware:categories_all' %}" type="button" class="btn btn-primary">Categories</a> {% endcomment %}
+</div>
+<table cellpadding="0" cellspacing="0" border="0"
+	class="table table-striped table-bordered table-hovered" id="categories">
+	<thead>
+		<tr>
+			<th>name</th>
+			<th>edit</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for n in categories %}
+		<tr>
+			<td>{{n.name}}</td>
+			<td>
+				<a data-remote="{% url 'hardware:edit_category_modal' category_id=n.id %}"
+					data-toggle="modal", data-target="#edit_category_modal">
+				<span class="fa fa-edit"></span>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<div id="edit_category_modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        </div>
+    </div>
+</body>
 </html>
 {% endblock %}

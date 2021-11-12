@@ -8,9 +8,14 @@ urlpatterns = [
     path('add_device/', views.add_device, name='add_device'),
     path('edit_device/<int:pk>', views.edit_device, name='edit_device'),
     path('delete_device/<int:pk>', views.delete_device, name='delete_device'),
-    path('assign_device_modal/<int:device_id>', views.assign_device_modal, name='assign_device_modal'),
+    path('assign_device_modal/<int:device_id>', views.assign_device_modal,
+     name='assign_device_modal'),
 
     path('categories_all', views.categories_all, name='categories_all'),
+    path('edit_category_modal/<int:category_id>', views.edit_category_modal,
+     name='edit_category_modal'),
+    path('delete_category/<int:category_id>', views.delete_category,
+     name='delete_category'),
 
     path('new_owner/<int:usercard>', views.new_owner, name='new_owner'),
     path('new_user_card', views.new_user_card, name='new_user_card')

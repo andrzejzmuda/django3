@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import Form, ModelForm, inlineformset_factory
 
 from .models import (Category,
                     Department,
@@ -8,10 +8,17 @@ from .models import (Category,
                     Device,
                     History)
 
+class CategoryForm(ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
 class DeviceForm(ModelForm):
     class Meta:
         model = Device
         fields = '__all__'
+
 
 class OwnerForm(ModelForm):
     class Meta:
@@ -21,7 +28,7 @@ class OwnerForm(ModelForm):
 
 DeviceFormSet = inlineformset_factory(Device, History, extra=1, fields='__all__', can_delete=True)
 
-class SearchForm(forms.Form):
+class SearchForm(Form):
     actions = (
         [("","")] +
         list(Events.objects.all().values_list('action', 'action'))
@@ -40,7 +47,7 @@ class SearchForm(forms.Form):
     owner = forms.CharField(required=False, label='owner')
 
 
-class AssignOwnerForm(forms.Form):
+class AssignOwnerForm(Form):
     devices = (
         [("","")] +
         list(Device.objects.all().values_list('id', 'hostname'))
@@ -50,6 +57,6 @@ class AssignOwnerForm(forms.Form):
     device = forms.ChoiceField(label='device', choices=devices)
 
 
-class NewCardForm(forms.Form):
+class NewCardForm(Form):
     card = forms.CharField(label='scan card here:')
     user = forms.CharField(label="user's shortsign")

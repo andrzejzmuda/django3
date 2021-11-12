@@ -22,6 +22,7 @@ from .forms import (
     AssignOwnerForm,
     DeviceForm,
     DeviceFormSet,
+    CategoryForm,
     OwnerForm,
     SearchForm,
     NewCardForm,
@@ -45,12 +46,13 @@ def search_devices(request):
         criteria['hostname'] = request.POST['hostname']
         criteria['description'] = request.POST['description']
         criteria['history__owner__kzz__username'] = request.POST['owner']
-        criteria['category__name'] = request.POST['category']
+        criteria['category__name'] = str(request.POST['category']).rstrip()
         criteria['serial_number'] = request.POST['serial_number']
         criteria['mac_address'] = request.POST['mac_address']
         criteria['history__event__action'] = request.POST['event']
         query = Device.objects.all()
         filters = search_criteria(criteria)
+        print(filters)
         if criteria.items():
             query = query.filter(filters).distinct()
         else:
@@ -251,3 +253,50 @@ def categories_all(request):
     template = loader.get_template('categories_all.html')
     categories = Category.objects.all()
     return HttpResponse(template.render({'categories': categories}, request))
+
+
+@permission_required('hardware.edit_category')
+def edit_category_modal(request, category_id):
+    """
+    Edits a category name
+
+    **Context**
+
+    ``edit_category_modal``
+        The window, which allows editing a modal name.
+    """
+    category_edit = Category.objects.get(id=category_id)
+    template = loader.get_template('edit_category_modal.html')
+    next = request.POST.get('next', 'hardware:categories_all')
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category_edit)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(next))
+    else:
+        form = CategoryForm(instance=category_edit)
+    return HttpResponse(
+        template.render({'form': form, 'category_edit': category_edit,
+        'category_id': category_id}, request))
+
+@permission_required('hardware.delete_category')
+def delete_category(request, category_id):
+    """
+    Deletes a category
+
+    **Context**
+    ``delete_category``
+        Function available in :view:`hardware.views.edit_category_modal`
+    """
+    category_delete = Category.objects.get(id=category_id)
+    next = request.POST.get('next', 'hardware:categories_all')
+    try:
+        category = Category.objects.get(id=category_id).delete()
+        if request.method == 'POST':
+            form = CategoryForm(request.POST, instance=category_delete)
+            form.u.delete()
+            form.save()
+    except ObjectDoesNotExist:
+        print(("No such category: {0}").format(category_delete.name))
+    finally:
+        return HttpResponseRedirect(reverse(next))
