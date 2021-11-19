@@ -38,7 +38,7 @@ def search_devices(request):
     **Context**
 
     ``search_devices``
-        A list of :model:`hardware.Device`.
+    A list of :model:`hardware.Device`.
     """
     template = loader.get_template('list_devices.html')
     searchForm = SearchForm()
@@ -74,7 +74,7 @@ def search_criteria(criteria):
     **Context**
 
     ``search_criteria``
-        Searching mechanism used by :view:`hardware.views.search_devices`
+    Searching mechanism used by :view:`hardware.views.search_devices`
     """
     filters = Q()
     if isinstance(criteria, dict):
@@ -120,7 +120,7 @@ def edit_device(request, pk):
     **Context**
 
     ``edit_device``
-        An instance of :model:`hardware.Device`.
+    An instance of :model:`hardware.Device`.
     """
     template = loader.get_template('device.html')
     next = request.POST.get('next', 'hardware:search_devices')
@@ -148,7 +148,7 @@ def delete_device(request, pk):
     **Context**
 
     ``delete_device``
-        An instance of :model:`hardware.Device`.
+    An instance of :model:`hardware.Device`.
     """
     next = request.POST.get('next', 'hardware:search_devices')
     try:
@@ -171,8 +171,8 @@ def assign_device_modal(request, device_id):
     **Context**
 
     ``assign_device_modal``
-        The window containing a form used to assign a device to a user.
-        The view utilises :view:`hardware.views.assign_device`
+    The window containing a form used to assign a device to a user.
+    The view utilises :view:`hardware.views.assign_device`
     """
     template = loader.get_template('assign_device_modal.html')
     next = request.POST.get('next', 'hardware:edit_device')
@@ -193,10 +193,10 @@ def assign_device(device_id, usercard):
     **Context**
     ``assign_device``
 
-        A method assigning a device to a user.
-        Models used:
-        :model:`canteen.models.UserCompanyCard`,
-        :models:`hardware.models.Owner`
+    A method assigning a device to a user.
+    Models used:
+    :model:`canteen.models.UserCompanyCard`,
+    :models:`hardware.models.Owner`
     """
     event, obj = Events.objects.get_or_create(action='new owner')
     card = UserCompanyCard.objects.get(card_original=usercard) #TODO: redirect if no card and user
@@ -264,7 +264,7 @@ def add_category_modal(request):
     **Context**
 
     ``category_modal``
-        The window, which allows adding a name.
+    The window, which allows adding a name.
     """
     template = loader.get_template('category_modal.html')
     next = request.POST.get('next', 'hardware:categories_all')
@@ -288,7 +288,7 @@ def edit_category_modal(request, category_id):
     **Context**
 
     ``category_modal``
-        The window, which allows editing a name.
+    The window, which allows editing a name.
     """
     category_edit = Category.objects.get(id=category_id)
     template = loader.get_template('category_modal.html')
@@ -311,7 +311,7 @@ def delete_category(request, category_id):
 
     **Context**
     ``delete_category``
-        Function available in :view:`hardware.views.edit_category_modal`
+    Function available in :view:`hardware.views.edit_category_modal`
     """
     category_delete = Category.objects.get(id=category_id)
     next = request.POST.get('next', 'hardware:categories_all')
@@ -342,7 +342,7 @@ def add_event_modal(request):
     **Context**
 
     ``event_modal``
-        The window, which allows adding a name.
+    The window, which allows adding a name.
     """
     template = loader.get_template('event_modal.html')
     next = request.POST.get('next', 'hardware:events_all')
@@ -366,7 +366,7 @@ def edit_event_modal(request, event_id):
     **Context**
 
     ``event_modal``
-        The window, which allows editing a name.
+    The window, which allows editing a name.
     """
     event_edit = Events.objects.get(id=event_id)
     template = loader.get_template('event_modal.html')
@@ -390,7 +390,7 @@ def delete_event(request, event_id):
 
     **Context**
     ``delete_event``
-        Function available in :view:`hardware.views.edit_event_modal`
+    Function available in :view:`hardware.views.edit_event_modal`
     """
     event_delete = Events.objects.get(id=event_id)
     next = request.POST.get('next', 'hardware:events_all')
