@@ -9,24 +9,31 @@
 <script language="JavaScript" type="text/javascript" src="/static/js/selectize.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Edit a category</title>
+    <title>Edit an event</title>
 </head>
 
 <body>
-<form enctype="multipart/form-data" method=POST action="{% url 'hardware:edit_category_modal' category_id=category_id %}" class="upload">
+{% if event_id %}
+<form enctype="multipart/form-data" method=POST action="{% url 'hardware:edit_event_modal' event_id=event_id %}" class="upload">
+{% else %}
+<form enctype="multipart/form-data" method=POST action="{% url 'hardware:add_event_modal' %}" class="upload">
+{% endif %}
     <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit a category</h5>
+                    <h5 class="modal-title">Edit an event</h5>
                 </div>
                 <div class="modal-body" style="margin: 10px;">
                     {% csrf_token %}
                     {{form.as_p}}
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Save</button>
-                    <a href="{% url 'hardware:delete_category' category_id=category_id %}"
-                     type="button" class="btn btn-danger">Delete</a>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save</button>
+                    {% if event_id %}
+                    <a href="{% url 'hardware:delete_event' event_id=event_id %}"
+                     type="button" class="btn btn-danger">
+                     <i class="fas fa-trash"></i> Delete</a>
+                    {% endif %}
                 </div>
             </div>
     </div>

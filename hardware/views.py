@@ -21,6 +21,7 @@ from canteen.models import UserCompanyCard
 from .forms import (
     AssignOwnerForm,
     DeviceForm,
+    EventForm,
     DeviceFormSet,
     CategoryForm,
     OwnerForm,
@@ -255,6 +256,30 @@ def categories_all(request):
     return HttpResponse(template.render({'categories': categories}, request))
 
 
+@permission_required('hardware.add_category')
+def add_category_modal(request):
+    """
+    Adds a category name
+
+    **Context**
+
+    ``category_modal``
+        The window, which allows adding a name.
+    """
+    template = loader.get_template('category_modal.html')
+    next = request.POST.get('next', 'hardware:categories_all')
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse(next))
+    else:
+        form = CategoryForm()
+    return HttpResponse(
+        template.render({'form': form}, request)
+    )
+
+
 @permission_required('hardware.edit_category')
 def edit_category_modal(request, category_id):
     """
@@ -262,11 +287,11 @@ def edit_category_modal(request, category_id):
 
     **Context**
 
-    ``edit_category_modal``
-        The window, which allows editing a modal name.
+    ``category_modal``
+        The window, which allows editing a name.
     """
     category_edit = Category.objects.get(id=category_id)
-    template = loader.get_template('edit_category_modal.html')
+    template = loader.get_template('category_modal.html')
     next = request.POST.get('next', 'hardware:categories_all')
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category_edit)
@@ -298,5 +323,84 @@ def delete_category(request, category_id):
             form.save()
     except ObjectDoesNotExist:
         print(("No such category: {0}").format(category_delete.name))
+    finally:
+        return HttpResponseRedirect(reverse(next))
+
+
+@permission_required('hardware.view_event')
+def events_all(request):
+    template = loader.get_template('events_all.html')
+    events = Events.objects.all()
+    return HttpResponse(template.render({'events': events}, request))
+
+
+@permission_required('hardware.add_event')
+def add_event_modal(request):
+    """
+    Adds an event name
+
+    **Context**
+
+    ``event_modal``
+        The window, which allows adding a name.
+    """
+    template = loader.get_template('event_modal.html')
+    next = request.POST.get('next', 'hardware:events_all')
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse(next))
+    else:
+        form = EventForm()
+    return HttpResponse(
+        template.render({'form': form}, request)
+    )
+
+
+@permission_required('hardware.edit_event')
+def edit_event_modal(request, event_id):
+    """
+    Edits an event name
+
+    **Context**
+
+    ``event_modal``
+        The window, which allows editing a name.
+    """
+    event_edit = Events.objects.get(id=event_id)
+    template = loader.get_template('event_modal.html')
+    next = request.POST.get('next', 'hardware:events_all')
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event_edit)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(next))
+    else:
+        form = EventForm(instance=event_edit)
+    return HttpResponse(
+        template.render({'form': form, 'event_edit': event_edit,
+        'event_id': event_id}, request))
+
+
+@permission_required('hardware.delete_event')
+def delete_event(request, event_id):
+    """
+    Deletes an event
+
+    **Context**
+    ``delete_event``
+        Function available in :view:`hardware.views.edit_event_modal`
+    """
+    event_delete = Events.objects.get(id=event_id)
+    next = request.POST.get('next', 'hardware:events_all')
+    try:
+        event = Events.objects.get(id=event_id).delete()
+        if request.method == 'POST':
+            form = EventForm(request.POST, instance=event_delete)
+            form.u.delete()
+            form.save()
+    except ObjectDoesNotExist:
+        print(("No such category: {0}").format(event_delete.name))
     finally:
         return HttpResponseRedirect(reverse(next))

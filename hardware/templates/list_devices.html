@@ -22,13 +22,14 @@
 </head>
 <body>
 <div style="margin: 9px">
-<a href="{% url 'hardware:add_device' %}" type="button" class="btn btn-primary">New Device</a>
-<a href="{% url 'hardware:categories_all' %}" type="button" class="btn btn-primary">Categories</a>
+<a href="{% url 'hardware:add_device' %}" type="button" class="btn btn-primary"><i class="fas fa-server"></i> New Device</a>
+<a href="{% url 'hardware:categories_all' %}" type="button" class="btn btn-primary"><i class="fas fa-shapes"></i> Categories</a>
+<a href="{% url 'hardware:events_all' %}" type="button" class="btn btn-primary"><i class="fas fa-book"></i> Events</a>
 </div>
 <form style="margin: 9px" method=POST action="{% url 'hardware:search_devices' %}">
 {% csrf_token %}
 {{searchForm.as_p}}
-<button class="btn btn-outline-secondary" type="submit">Search</button>
+<button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i> Search</button>
 
 </form>
 {% if searched %}

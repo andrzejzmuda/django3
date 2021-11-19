@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models.base import Model
 from django.forms import Form, ModelForm, inlineformset_factory
 
 from .models import (Category,
@@ -7,6 +8,13 @@ from .models import (Category,
                     Owner,
                     Device,
                     History)
+
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Events
+        fields = '__all__'
+
 
 class CategoryForm(ModelForm):
     class Meta:

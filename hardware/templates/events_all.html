@@ -10,7 +10,7 @@
 		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				$('#categories').dataTable();
+				$('#events').dataTable();
 			} );
 		</script>
 		<script>
@@ -29,33 +29,34 @@
 </head>
 <body>
 <div style="margin: 9px">
-	<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-primary"><i class="fas fa-server"></i> Devices</a>
-	<a data-remote="{% url 'hardware:add_category_modal' %}"
-		data-toggle="modal", data-target="#edit_category_modal" type="button"
-		class="btn btn-primary"><i class="fas fa-plus"></i> New category</a>
+	<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-primary">
+        <i class="fas fa-server"></i> Devices</a>
+	<a data-remote="{% url 'hardware:add_event_modal' %}"
+		data-toggle="modal", data-target="#edit_event_modal" type="button"
+		class="btn btn-primary"><i class="fas fa-plus"></i> New event</a>
 </div>
 <table cellpadding="0" cellspacing="0" border="0"
-	class="table table-striped table-bordered table-hovered" id="categories">
+	class="table table-striped table-bordered table-hovered" id="events">
 	<thead>
 		<tr>
-			<th>name</th>
+			<th>action</th>
 			<th>edit</th>
 		</tr>
 	</thead>
 	<tbody>
-	{% for n in categories %}
+	{% for n in events %}
 		<tr>
-			<td>{{n.name}}</td>
+			<td>{{n.action}}</td>
 			<td>
-				<a data-remote="{% url 'hardware:edit_category_modal' category_id=n.id %}"
-					data-toggle="modal", data-target="#edit_category_modal">
+				<a data-remote="{% url 'hardware:edit_event_modal' event_id=n.id %}"
+					data-toggle="modal", data-target="#edit_event_modal">
 				<span class="fa fa-edit"></span>
 			</td>
 		</tr>
 	{% endfor %}
 	</tbody>
 </table>
-<div id="edit_category_modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="edit_event_modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         </div>
     </div>
