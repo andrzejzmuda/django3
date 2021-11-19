@@ -304,6 +304,7 @@ def edit_category_modal(request, category_id):
         template.render({'form': form, 'category_edit': category_edit,
         'category_id': category_id}, request))
 
+
 @permission_required('hardware.delete_category')
 def delete_category(request, category_id):
     """
@@ -313,16 +314,15 @@ def delete_category(request, category_id):
     ``delete_category``
     Function available in :view:`hardware.views.edit_category_modal`
     """
-    category_delete = Category.objects.get(id=category_id)
+    category_delete = Category.objects.get(id=category_id).delete()
     next = request.POST.get('next', 'hardware:categories_all')
     try:
-        category = Category.objects.get(id=category_id).delete()
         if request.method == 'POST':
             form = CategoryForm(request.POST, instance=category_delete)
             form.u.delete()
             form.save()
     except ObjectDoesNotExist:
-        print(("No such category: {0}").format(category_delete.name))
+        print(("No such category").format(category_delete.name))
     finally:
         return HttpResponseRedirect(reverse(next))
 
@@ -392,15 +392,15 @@ def delete_event(request, event_id):
     ``delete_event``
     Function available in :view:`hardware.views.edit_event_modal`
     """
-    event_delete = Events.objects.get(id=event_id)
     next = request.POST.get('next', 'hardware:events_all')
     try:
         event = Events.objects.get(id=event_id).delete()
         if request.method == 'POST':
-            form = EventForm(request.POST, instance=event_delete)
-            form.u.delete()
-            form.save()
+            form = EventForm(request.POST, instance=event)
+            if form.is_valid():
+                form.u.delete()
+                form.save()
     except ObjectDoesNotExist:
-        print(("No such category: {0}").format(event_delete.name))
+        print("No such category")
     finally:
         return HttpResponseRedirect(reverse(next))
