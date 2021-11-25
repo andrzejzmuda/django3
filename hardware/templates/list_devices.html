@@ -26,12 +26,14 @@
 <a href="{% url 'hardware:categories_all' %}" type="button" class="btn btn-primary"><i class="fas fa-shapes"></i> Categories</a>
 <a href="{% url 'hardware:events_all' %}" type="button" class="btn btn-primary"><i class="fas fa-book"></i> Events</a>
 </div>
+<div class="col-sm-5">
 <form style="margin: 9px" method=POST action="{% url 'hardware:search_devices' %}">
 {% csrf_token %}
 {{searchForm.as_p}}
 <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i> Search</button>
 
 </form>
+</div>
 {% if searched %}
 		<h5 style="margin: 9px">Results for:
 			<ul class="list-inline">
@@ -71,6 +73,17 @@
 {% else %}
 		<h5>Search for your devices</h5>
 {% endif %}
+
+<script type="text/javascript">
+        $(document).ready(function() {
+                $("#id_category, #id_event").selectize( {
+                });
+                var list = document.querySelectorAll("input");
+                for (var i=0; i < list.length; i++) {
+                    list[i].classList.add('form-control')
+                }
+            });
+</script>
 </body>
 </html>
 {% endblock %}

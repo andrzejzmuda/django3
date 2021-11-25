@@ -8,6 +8,10 @@
 		<link rel="stylesheet" type="text/css" href="/static/datables/datatables.min.css">
 		<script type="text/javascript" language="javascript" src="/static/js/bootstrap.js.map"></script>
 		<script type="text/javascript" language="javascript" src="/static/datables/datatables.min.js"></script>
+		<!-- selectize CSS -->
+		<link rel="stylesheet" href="/static/css/selectize.css"/>
+		<!--selectize JS -->
+		<script type="text/javascript" src="/static/js/selectize.js"></script>
 		<script>
         $(document).ready(function() {
             $('body').on('click', '[data-toggle="modal"]', function () {
@@ -21,21 +25,35 @@
 <a data-remote="{% url 'hardware:assign_device_modal' device_id=device.id %}" class="btn btn-info" type="button" style="vertical-align:top; float: left"
        data-toggle="modal" data-target="#assign_device_modal">assign this device</a>
 {% endif %}
-<form action="" method="post" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{form.as_p}}
-	{{formset.as_p}}
-	<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
-	{% if device %}
-	<a href="{% url 'hardware:delete_device' device.id %}" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
-	{% endif %}
-	<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-dark"><i class="far fa-window-close"></i> Cancel</a>
-</form>
-
+<div class="col-sm-5">
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.as_p}}
+		{{formset.as_p}}
+		<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+		{% if device %}
+		<a href="{% url 'hardware:delete_device' device.id %}" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+		{% endif %}
+		<a href="{% url 'hardware:search_devices' %}" type="button" class="btn btn-dark"><i class="far fa-window-close"></i> Cancel</a>
+	</form>
+</div>
 <div id="assign_device_modal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         </div>
     </div>
+
+<script type="text/javascript">
+        $(document).ready(function() {
+			var dropdowns = document.querySelectorAll('select')
+			console.log(dropdowns)
+			$("#id_category, #id_event").selectize( {
+                });
+                var list = document.querySelectorAll("input");
+                for (var i=0; i < list.length; i++) {
+                    list[i].classList.add('form-control')
+                }
+            });
+</script>
 </body>
 </html>
 {% endblock %}
