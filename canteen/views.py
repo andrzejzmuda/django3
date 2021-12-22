@@ -12,7 +12,6 @@ from django import template
 import csv
 from django.contrib.auth.decorators import permission_required, login_required
 import re
-# from django.utils.http import urlquote
 from operator import itemgetter
 
 from canteen.models import Menu, Order, Product, OrderItems, UserCompanyCard, Company, OrderConsents
