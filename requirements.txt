@@ -24,7 +24,7 @@ pyexcel-io==0.6.4
 pyexcel-webio==0.1.4
 Pygments==2.9.0
 pytz==2021.1
-sqlparse==0.4.1
+sqlparse==0.4.2
 texttable==1.6.4
 traitlets==5.0.5
 wcwidth==0.2.5
