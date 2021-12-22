@@ -12,7 +12,7 @@ from django import template
 import csv
 from django.contrib.auth.decorators import permission_required, login_required
 import re
-from django.utils.http import urlquote
+# from django.utils.http import urlquote
 from operator import itemgetter
 
 from canteen.models import Menu, Order, Product, OrderItems, UserCompanyCard, Company, OrderConsents
@@ -637,7 +637,7 @@ def report_per_company_csv(request, from_date, to_date, company):
     company_name = Company.objects.get(id=company).name
     response = HttpResponse(content_type='text/csv')
     filename = str(company_name) + '.csv'
-    response['Content-Disposition'] = 'attachment; filename={}'.format(urlquote(filename))
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     writer = csv.writer(response, delimiter=';')
     writer.writerow(['date', 'client', 'personal number', '100% cost', "client's cost", 'discount cost'])
     for n in per_company:
@@ -718,7 +718,7 @@ def report_per_person_csv(request, from_date, to_date, company):
     ))
     response = HttpResponse(content_type='text/csv')
     filename = str(company_name.name) + '.csv'
-    response['Content-Disposition'] = 'attachment; filename={}'.format(urlquote(filename))
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     writer = csv.writer(response, delimiter=';')
     writer.writerow(['shortsign', 'name', 'last name', 'personal number', 'client cost', 'comp cost', 'sum'])
     for n in users:
@@ -757,7 +757,7 @@ def orders_for_the_day_csv(request, day):
     dishes_list = dishes.distinct().annotate(quantity=Sum(F('quantity')))
     response = HttpResponse(content_type='text/csv')
     filename = str(strday.date()) + '.csv'
-    response['Content-Disposition'] = 'attachment; filename={}'.format(urlquote(filename))
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     writer = csv.writer(response, delimiter=';')
     writer.writerow(["orders for the day: ", strday.date()])
     writer.writerow(["dish", "quantity"])
