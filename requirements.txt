@@ -3,7 +3,7 @@ asgiref==3.4.1
 backcall==0.2.0
 backports.zoneinfo==0.2.1
 decorator==5.0.9
-Django==4.0
+Django==4.0.4
 django-environ==0.4.5
 django-excel==0.0.10
 docutils==0.17.1
