@@ -2,7 +2,7 @@ from django.test import TestCase
 import string
 import random
 
-from hardware.models import Category, History
+from models import Category, History
 
 
 class CategoryTest(TestCase):

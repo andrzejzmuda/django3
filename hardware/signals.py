@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 import shutil
 
-from hardware.models import History
+from models import History
 from django3_apps.settings import BASE_DIR
 
 # @receiver(pre_delete, sender=History, dispatch_uid="delete_file")
