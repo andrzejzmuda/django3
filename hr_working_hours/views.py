@@ -1034,7 +1034,7 @@ def send_csv(request, company_name):
     try:
         recipient = str(request.user.email)
     except:
-        recipient = str(request.user.username + '@viessmann.com')
+        recipient = str(request.user.username + '@mail.com')
     email_to = []
     email_to.append(recipient)
     day = str(datetime.date.today())
