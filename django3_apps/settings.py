@@ -19,6 +19,9 @@ environ.Env.read_env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -97,14 +100,14 @@ DATABASES = {
         'HOST': env('HOST'),
         'PORT': env('PORT')
     },
-    'time_registry': {
-        'ENGINE': env('DATABASE_ENGINE'),
-        'NAME': env('DATABASE_NAME_TIME_REGISTRY'),
-        'USER': env('DATABASE_USER_TIME_REGISTRY'),
-        'PASSWORD': env('DATABASE_PASS_TIME_REGISTRY'),
-        'HOST': env('HOST_TIME_REGISTRY'),
-        'PORT': env('PORT_TIME_REGISTRY'),
-    },
+    # 'time_registry': {
+    #     'ENGINE': env('DATABASE_ENGINE'),
+    #     'NAME': env('DATABASE_NAME_TIME_REGISTRY'),
+    #     'USER': env('DATABASE_USER_TIME_REGISTRY'),
+    #     'PASSWORD': env('DATABASE_PASS_TIME_REGISTRY'),
+    #     'HOST': env('HOST_TIME_REGISTRY'),
+    #     'PORT': env('PORT_TIME_REGISTRY'),
+    # },
 }
 
 
