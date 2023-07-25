@@ -27,10 +27,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+#SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'o34k+7g+u#g#r-3x_lf-to07t4)%0pby6!w7nr+p$mpxfla-vm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG='on'
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,12 +94,8 @@ WSGI_APPLICATION = 'django3_apps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DATABASE_ENGINE'),
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASS'),
-        'HOST': env('HOST'),
-        'PORT': env('PORT')
+        'ENGINE': "django.db.backends.sqlite3",
+        'NAME': "test",
     },
     # 'time_registry': {
     #     'ENGINE': env('DATABASE_ENGINE'),

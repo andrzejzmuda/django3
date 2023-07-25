@@ -498,24 +498,6 @@ def hr_report_per_company(request, company, week_start, week_end):
         report = WorkingHours.objects.filter(Q(shortsign=n), Q(entry_time__range=[start, end])).values_list().order_by('entry_time')
         for x in report:
             reports.append(dict(zip(columns, x)))
-    # for n in employees:
-    #     report = WorkingHours.objects.filter(Q(shortsign=n), Q(entry_time__range=[start, end])).values().order_by('entry_time')
-    #     for x in report:
-    #         user = {}
-    #         user['id'] = x['id']
-    #         user['source_id'] = x['source_id']
-    #         user['card'] = x['card']
-    #         user['shortsign'] = x['shortsign']
-    #         user['entry_time'] = x['entry_time']
-    #         user['leaving_time'] = x['leaving_time']
-    #         user['accepted'] = x['accepted']
-    #         user['total_time'] = x['total_time']
-    #         user['extra_time'] = x['extra_time']
-    #         user['holiday'] = x['holiday']
-    #         user['accepted_by'] = x['accepted_by']
-    #         user['holiday_type_id'] = x['holiday_type_id']
-    #         reports["data"].append(user)
-    # print(reports['data'])
     context = {'reports': reports, 'company': comp_name.name, 'week_start': week_start, 'week_end': week_end}
     return HttpResponse(template.render(context, request))
 
