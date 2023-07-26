@@ -34,6 +34,7 @@ SECRET_KEY = 'o34k+7g+u#g#r-3x_lf-to07t4)%0pby6!w7nr+p$mpxfla-vm'
 DEBUG='on'
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://andrzejzmuda-shiny-doodle-xgrpvp66p6fv95p-8000.preview.app.github.dev']
 
 
 # Application definition
