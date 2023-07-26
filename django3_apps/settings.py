@@ -27,14 +27,12 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = env('SECRET_KEY')
-SECRET_KEY = 'o34k+7g+u#g#r-3x_lf-to07t4)%0pby6!w7nr+p$mpxfla-vm'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG='on'
+DEBUG=env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://andrzejzmuda-shiny-doodle-xgrpvp66p6fv95p-8000.preview.app.github.dev']
 
 
 # Application definition

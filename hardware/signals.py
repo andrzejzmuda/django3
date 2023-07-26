@@ -1,10 +1,10 @@
-from django.db.models.signals import pre_delete
-from django.dispatch import receiver
+# from django.db.models.signals import pre_delete
+# from django.dispatch import receiver
 
-import shutil
+# import shutil
 
-from models import History
-from django3_apps.settings import BASE_DIR
+# from models import History
+# from django3_apps.settings import BASE_DIR
 
 # @receiver(pre_delete, sender=History, dispatch_uid="delete_file")
 # def delete_file(instance, **kwargs):
