@@ -866,24 +866,20 @@ def last_day_delete(request, pk):
 
 @permission_required('hr_working_hours.change_lastday')
 def first_day_training(request, worker, first_day):
-    try:
-        training_id = HolidayTypes.objects.get(type="BHP").id
-    except:
-        training_id = HolidayTypes.objects.create(type="BHP").save()
-        training_id = training_id.id
-    if WorkingHours.objects.filter(shortsign=worker, holiday_type=training_id).exists():
-        WorkingHours.objects.filter(shortsign=worker, holiday_type=training_id).update(
+    training_id, cr = HolidayTypes.objects.get_or_create(type="BHP")
+    if WorkingHours.objects.filter(shortsign=worker, holiday_type=training_id.id).exists():
+        WorkingHours.objects.filter(shortsign=worker, holiday_type=training_id.id).update(
             entry_time=datetime.datetime.combine(first_day,
                                                  datetime.datetime.strptime('0800', '%H%M').time()),
             leaving_time=datetime.datetime.combine(first_day, datetime.datetime.strptime('1600', '%H%M').time()),
-            holiday=True, holiday_type_id=training_id)
+            holiday=True, holiday_type_id=training_id.id)
     else:
         WorkingHours.objects.create(shortsign=worker,
                                     entry_time=datetime.datetime.combine(
                                         first_day, datetime.datetime.strptime('0800', '%H%M').time()),
                                     leaving_time=datetime.datetime.combine(
                                         first_day, datetime.datetime.strptime('1600', '%H%M').time()),
-                                    holiday=True, holiday_type_id=training_id
+                                    holiday=True, holiday_type_id=training_id.id
                                     )
 
 
