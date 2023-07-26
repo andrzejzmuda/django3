@@ -4,7 +4,7 @@
 
 /site_media/
 /*/migrations/
-/staticfiles/
+/staticfiles/*
 
 .idea/**/workspace.xml
 .idea/**/tasks.xml
